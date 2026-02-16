@@ -25,59 +25,64 @@ export class Book extends AggregateRoot<BookId> {
     super();
   }
 
+
   public static create(command: CreateBookCommand): Book {
     const book = new Book();
+
     book.id = BookId.generate();
-    book.isbn = BookIsbn.create(command.isbn);
-    book.language = BookLanguage.create(command.language);
-    book.status = command.status
+    book._title = BookTitle.create(command.title);
+    book._price = BookPrice.create(command.price);
+    book._isbn = BookIsbn.create(command.isbn);
+    book._language = BookLanguage.create(command.language);
+    book._status = command.status
       ? BookStatus.from(command.status)
       : BookStatus.draft();
-    book.title = command.title;
-    book.price = BookPrice.create(command.price);
+
     book.createdAt = new Date();
     book.updatedAt = new Date();
+
     return book;
   }
-public static reconstruct(
-  id: BookId,
-  title: string,
-  price: BookPrice,
-  lang: BookLanguage,
-  isbn: BookIsbn,
-  status: BookStatus,
-  createdAt: Date,
-  updatedAt: Date
-): Book {
-  const book = new Book();
-  book.id = id;
-  book.title = title;
-  book.price = price;
-  book.language = lang;
-  book.isbn = isbn;
-  book.status = status;
-  book.createdAt = createdAt;
-  book.updatedAt = updatedAt;
-  return book;
-}
+
+// public static reconstruct(
+//   id: BookId,
+//   title: string,
+//   price: BookPrice,
+//   lang: BookLanguage,
+//   isbn: BookIsbn,
+//   status: BookStatus,
+//   createdAt: Date,
+//   updatedAt: Date
+// ): Book {
+//   const book = new Book();
+//   book.id = id;
+//   book.title = title;
+//   book.price = price;
+//   book.language = lang;
+//   book.isbn = isbn;
+//   book.status = status;
+//   book.createdAt = createdAt;
+//   book.updatedAt = updatedAt;
+//   return book;
+// }
 
 
-  public updateTitle(title: string): void {
-    this.title = title;
+  public updateTitle(title:BookTitle): void {
+    this._title=title;
     this.markAsUpdated();
   }
 
-  public updatePrice(price: string): void {
-    this.price = BookPrice.create(price);
+  public updatePrice(price: BookPrice): void {
+    this._price = price;
     this.markAsUpdated();
   }
 
-  public updateLanguage(language: string): void {
-    this.language = BookLanguage.create(language);
+  public updateLanguage(language: BookLanguage): void {
+    this._language =language
     this.markAsUpdated();
   }
-  public updateStatus(status: string): void {
-    this.status = BookStatus.from(status as any)
+  public updateStatus(status: BookStatus): void {
+    this._status=status
     this.markAsUpdated();
   }
 
@@ -86,10 +91,10 @@ public static reconstruct(
   private markAsUpdated(): void {
     this.updatedAt = new Date();
   }
-  //setter
+
   //getter
 
-  public get title(): string {
+  public get title(): BookTitle {
     return this._title;
   }
   public get language(): BookLanguage {

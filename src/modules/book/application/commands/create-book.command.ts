@@ -1,6 +1,6 @@
 export interface CreateBookCommand {
   title: string;
-  price: number | string;
+  price: number;
   isbn: string;
   language: string;
   status?: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';

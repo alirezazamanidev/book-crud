@@ -17,6 +17,26 @@ export class Book extends AggregateRoot<BookId> {
   }
 
 
+  public static reconstruct(
+    id: BookId,
+    title: string,
+    price: BookPrice,
+    isbn: BookIsbn,
+    status: BookStatus,
+
+  ): Book {
+
+    const book = new Book();
+    book.id = id;
+    book.title = title;
+    book.price = price;
+    book.isbn = isbn;
+    book.status = status;
+    book.createdAt =new Date()
+    book.updatedAt =new Date()
+
+    return book;
+  }
   public updateTitle(title: string): void {
 
     this.title = title;

@@ -6,6 +6,7 @@ import { TypeOrmBookRepository } from "./infrastructure/typeorm/book.repository.
 import { CreateBookUseCase } from "./application/use-cases/create-book.use-case";
 import { BookControoler } from "./presentation/book.controller";
 import { DeleteBookUseCase } from "./application/use-cases/delete-book.use-case";
+import { GetAllBooksUseCase } from "./application/use-cases/get-all-books.use-case";
 
 @Module({
   imports:[TypeOrmModule.forFeature([BookEntity])],
@@ -13,6 +14,7 @@ import { DeleteBookUseCase } from "./application/use-cases/delete-book.use-case"
   providers:[
     CreateBookUseCase,
     DeleteBookUseCase,
+    GetAllBooksUseCase,
 
     {
       provide:BOOK_REPOSITORY,

@@ -1,65 +1,48 @@
 import { ValueObject } from 'src/common/seed-works/valueObject';
 export type BookStatusType = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
 
-export class BookStatus extends ValueObject<string> {
-  private static readonly VALID_STATUSES: readonly string[] = [
-    'DRAFT',
-    'PUBLISHED',
-    'ARCHIVED',
-  ] as const;
+export class BookStatus extends ValueObject<BookStatusType> {
 
-  private constructor(value: string) {
-    super({ value });
+
+  private static readonly VALID_STATUSES=['DRAFT','PUBLISHED','ARCHIVED']
+  private constructor(value:BookStatusType){
+    super({value})
+
   }
 
-  public static from(value: string): BookStatus {
-    if (!BookStatus.VALID_STATUSES.includes(value)) {
+    static from(value: string): BookStatus {
+  if (!BookStatus.isValid(value)) {
       throw new Error(
-        `Invalid book status. Valid statuses are: ${BookStatus.VALID_STATUSES.join(', ')}`,
+        `Invalid book status. Valid statuses are: ${BookStatus.VALID_STATUSES.join(', ')}`
       );
     }
+
     return new BookStatus(value);
   }
 
-  public static draft(): BookStatus {
+  static draft(): BookStatus {
     return new BookStatus('DRAFT');
   }
-
-  public static published(): BookStatus {
+  private static isValid(value: string): value is BookStatusType {
+    return (BookStatus.VALID_STATUSES as readonly string[]).includes(value);
+  }
+  static published(): BookStatus {
     return new BookStatus('PUBLISHED');
   }
 
-  public static archived(): BookStatus {
+  static archived(): BookStatus {
     return new BookStatus('ARCHIVED');
   }
 
-  public canBePublished(): boolean {
+  get isDraft(): boolean {
     return this.value === 'DRAFT';
   }
 
-  public canBeArchived(): boolean {
-    return this.value !== 'ARCHIVED';
-  }
-
-  public canTransitionTo(targetStatus: BookStatusType): boolean {
-    if (this.value === 'DRAFT' && targetStatus === 'PUBLISHED') {
-      return true;
-    }
-    if (this.value !== 'ARCHIVED' && targetStatus === 'ARCHIVED') {
-      return true;
-    }
-    return false;
-  }
-
-  public isPublished(): boolean {
+  get isPublished(): boolean {
     return this.value === 'PUBLISHED';
   }
 
-  public isDraft(): boolean {
-    return this.value === 'DRAFT';
-  }
-
-  public isArchived(): boolean {
+  get isArchived(): boolean {
     return this.value === 'ARCHIVED';
   }
 }

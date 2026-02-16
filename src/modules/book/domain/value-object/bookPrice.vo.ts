@@ -1,76 +1,65 @@
 import { ValueObject } from 'src/common/seed-works/valueObject';
 
 export class BookPrice extends ValueObject<number> {
-  private static readonly MIN_PRICE = 0;
-  private static readonly MAX_PRICE = 1_000_000;
-  private static readonly PRECISION = 2;
+  private static readonly MIN_CENTS = 0;
+  private static readonly MAX_CENTS = 100_000_000;
 
   private constructor(value: number) {
     super({ value });
   }
 
-  private static validate(value: number): void {
-    if (typeof value !== 'number') {
-      throw new Error('Price must be a number');
-    }
-
-    if (isNaN(value) || !isFinite(value)) {
+  static create(amount: number): BookPrice {
+    if (!Number.isFinite(amount)) {
       throw new Error('Price must be a valid number');
     }
 
-    if (value < BookPrice.MIN_PRICE) {
-      throw new Error(
-        `Price cannot be negative. Minimum price: ${BookPrice.MIN_PRICE}`,
-      );
+    const cents = Math.round(amount * 100);
+
+    if (cents < this.MIN_CENTS) {
+      throw new Error('Price cannot be negative');
     }
 
-    if (value > BookPrice.MAX_PRICE) {
-      throw new Error(
-        `Price cannot exceed ${BookPrice.MAX_PRICE.toLocaleString()}`,
-      );
-    }
-  }
-
-  public static create(value: string | number): BookPrice {
-    let numericValue: number;
-
-    if (typeof value === 'string') {
-      const trimmed = value.trim();
-      if (trimmed.length === 0) {
-        throw new Error('Price cannot be empty');
-      }
-
-      numericValue = parseFloat(trimmed);
-      if (isNaN(numericValue)) {
-        throw new Error(
-          `Invalid price format: "${value}"`,
-        );
-      }
-    } else {
-      numericValue = value;
+    if (cents > this.MAX_CENTS) {
+      throw new Error('Price exceeds maximum allowed value');
     }
 
-    BookPrice.validate(numericValue);
+    return new BookPrice(cents);
+  }
+  static fromCents(cents: number): BookPrice {
+    if (!Number.isInteger(cents)) {
+      throw new Error('Cents must be an integer');
+    }
 
-    // Round to 2 decimal places
-    const roundedValue = Math.round(numericValue * 100) / 100;
+    if (cents < this.MIN_CENTS || cents > this.MAX_CENTS) {
+      throw new Error('Invalid price range');
+    }
 
-    return new BookPrice(roundedValue);
+    return new BookPrice(cents);
   }
 
-  public format(): string {
-    return `$${this.value.toFixed(BookPrice.PRECISION)}`;
+  public add(other: BookPrice) {
+    return BookPrice.fromCents(this.value + other.value);
+  }
+  subtract(other: BookPrice): BookPrice {
+    const result = this.value - other.value;
+
+    if (result < 0) {
+      throw new Error('Resulting price cannot be negative');
+    }
+
+    return BookPrice.fromCents(result);
   }
 
-  public isGreaterThan(price: BookPrice): boolean {
-    return this.value > price.value;
+
+  isGreaterThan(other: BookPrice): boolean {
+    return this.value > other.value;
   }
 
-  public isLessThan(price: BookPrice): boolean {
-    return this.value < price.value;
+  isLessThan(other: BookPrice): boolean {
+    return this.value < other.value
   }
 
-  public equals(price: BookPrice): boolean {
-    return this.value === price.value;
+  equals(other: BookPrice): boolean {
+    return this.value === other.value;
   }
 }

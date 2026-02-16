@@ -1,6 +1,7 @@
 import { Book } from "../../domain/Book";
 import { BookId } from "../../domain/value-object/bookId.vo";
 import { BookIsbn } from "../../domain/value-object/bookIsbn.vo";
+import { BookLanguage } from "../../domain/value-object/bookLanguage.vo";
 import { BookPrice } from "../../domain/value-object/bookPrice.vo";
 import { BookStatus } from "../../domain/value-object/bookStatus.vo";
 import { BookEntity } from "./book.entity";
@@ -17,6 +18,7 @@ export class BookMapper {
         BookId.create(entity.id),
         entity.title,
         BookPrice.create(entity.price),
+        BookLanguage.create(entity.language),
         BookIsbn.create(entity.isbn),
         BookStatus.from(entity.status as any),
 
@@ -38,6 +40,7 @@ export class BookMapper {
       entity.id = book.id.value;
       entity.title = book.title;
       entity.price = book.price.value;
+      entity.language=book.language.value;
       entity.isbn = book.isbn.value;
       entity.status = book.status.value;
       entity.createdAt = book.createdAt;

@@ -1,19 +1,43 @@
 import { AggregateRoot } from "../../../common/seed-works/aggregateRoot";
+import { CreateBookCommand } from "../application/commands/create-book.command";
 import { BookId } from "./value-object/bookId.vo";
 import { BookIsbn } from "./value-object/bookIsbn.vo";
+import { BookLanguage } from "./value-object/bookLanguage.vo";
 import { BookPrice } from "./value-object/bookPrice.vo";
-import { BookStatus } from "./value-object/bookStatus.vo";
+import { BookStatus, BookStatusType } from "./value-object/bookStatus.vo";
 
-
+interface BookProps {
+  title: string;
+  price: string | number;
+  isbn: string;
+  language?: string;
+  status?: BookStatusType;
+}
 export class Book extends AggregateRoot<BookId> {
 
   private _title: string;
   private _price: BookPrice;
   private _isbn: BookIsbn
   private _status: BookStatus
+  private _language: BookLanguage
 
   private constructor() {
     super()
+  }
+
+
+  public  static create(command:CreateBookCommand):Book{
+    const book=new Book();
+    book.id=BookId.generate();
+    book.isbn=BookIsbn.create(command.isbn);
+    book.language=BookLanguage.create(command.language);
+    book.status=command.status ? BookStatus.from(command.status):BookStatus.draft();
+    book.title=command.title;
+    book.price=BookPrice.create(command.price);
+    book.createdAt=new Date()
+    book.updatedAt=new Date()
+    return book;
+
   }
 
 
@@ -21,6 +45,7 @@ export class Book extends AggregateRoot<BookId> {
     id: BookId,
     title: string,
     price: BookPrice,
+    lang:BookLanguage,
     isbn: BookIsbn,
     status: BookStatus,
 
@@ -31,12 +56,14 @@ export class Book extends AggregateRoot<BookId> {
     book.title = title;
     book.price = price;
     book.isbn = isbn;
+    book.language=lang;
     book.status = status;
     book.createdAt =new Date()
     book.updatedAt =new Date()
 
     return book;
   }
+
   public updateTitle(title: string): void {
 
     this.title = title;
@@ -107,13 +134,17 @@ export class Book extends AggregateRoot<BookId> {
   public set isbn(isbn: BookIsbn) {
     this._isbn = isbn;
   }
-
+  public set language(lang:BookLanguage){
+    this._language=lang
+  }
   //getter
 
   public get title(): string {
     return this._title;
   }
-
+public get language(): BookLanguage {
+    return this._language;
+  }
   public get price(): BookPrice {
     return this._price;
   }

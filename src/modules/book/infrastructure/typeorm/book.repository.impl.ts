@@ -6,6 +6,7 @@ import { Repository } from "typeorm";
 import { Book } from "../../domain/Book";
 import { BookMapper } from "./book.mapper";
 import { BookId } from "../../domain/value-object/bookId.vo";
+import { BookIsbn } from "../../domain/value-object/bookIsbn.vo";
 
 @Injectable()
 export class TypeOrmBookRepository implements IBookRepository {
@@ -13,7 +14,7 @@ export class TypeOrmBookRepository implements IBookRepository {
 
   constructor(@InjectRepository(BookEntity) private readonly bookRepository: Repository<BookEntity>) { }
 
-  async save(book: Book): Promise<void> {
+  async save(book: Book){
     try {
       const entity = BookMapper.toPersistence(book);
       await this.bookRepository.save(entity);
@@ -39,6 +40,23 @@ export class TypeOrmBookRepository implements IBookRepository {
       throw new Error(`Failed to find book: ${error.message}`);
     }
   }
+  async findByIsbn(isbn: BookIsbn): Promise<Book | null> {
+    try {
+      const entity = await this.bookRepository.findOne({
+        where: { isbn: isbn.value },
+      });
+
+      if (!entity) {
+        return null;
+      }
+
+      return BookMapper.toDomain(entity);
+    } catch (error) {
+      this.logger.error(`Failed to find book by ISBN ${isbn.value}:`, error);
+      throw new Error(`Failed to find book by ISBN: ${error.message}`);
+    }
+  }
+
   async findAll(): Promise<Book[]> {
     try {
       const entities = await this.bookRepository.find({

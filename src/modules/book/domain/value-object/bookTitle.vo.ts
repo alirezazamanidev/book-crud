@@ -1,4 +1,4 @@
-import { ValueObject } from 'src/common/seed-works/valueObject';
+import { ValueObject } from 'src/common/seed-works/domain/valueObject';
 
 export class BookTitle extends ValueObject<string> {
   private static readonly MIN_LENGTH = 3;

@@ -4,15 +4,17 @@ import type { IBookRepository } from "../../domain/repositories/book.repository.
 import { Book } from "../../domain/Book";
 import { CreateBookCommand } from "../commands/create-book.command";
 import { BookIsbn } from "../../domain/value-object/bookIsbn.vo";
+import { IUseCase } from "src/common/seed-works/application/use-case.interface";
+import { BookResponseDto } from "../../presentation/dtos/book-response.dto";
 
 
 @Injectable()
-export  class CreateBookUseCase {
+export  class CreateBookUseCase implements IUseCase<CreateBookCommand,BookResponseDto> {
   constructor(
     @Inject(BOOK_REPOSITORY)
     private readonly bookRepository: IBookRepository,
   ) {}
-  async execute(command: CreateBookCommand): Promise<Book> {
+  async execute(command: CreateBookCommand): Promise<BookResponseDto> {
 
     const isbn=BookIsbn.create(command.isbn);
       const existingBook = await this.bookRepository.findByIsbn(isbn);
@@ -23,6 +25,6 @@ export  class CreateBookUseCase {
 
     const book=Book.create(command);
     await this.bookRepository.save(book);
-    return book;
+    return BookResponseDto.fromDomain(book);
   }
 }

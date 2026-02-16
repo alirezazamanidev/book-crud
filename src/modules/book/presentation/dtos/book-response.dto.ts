@@ -16,7 +16,7 @@ export class BookResponseDto {
   static fromDomain(book: Book): BookResponseDto {
     const dto = new BookResponseDto();
     dto.id = book.id.value;
-    dto.title = book.title;
+    dto.title = book.title.value;
     dto.price = book.price.value;
     dto.isbn = book.isbn.value;
     dto.language = book.language ? book.language.value : null;

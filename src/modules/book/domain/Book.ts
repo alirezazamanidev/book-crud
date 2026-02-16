@@ -1,4 +1,4 @@
-import { AggregateRoot } from '../../../common/seed-works/aggregateRoot';
+import { AggregateRoot } from '../../../common/seed-works/domain/aggregateRoot';
 import { CreateBookCommand } from '../application/commands/create-book.command';
 import { BookId } from './value-object/bookId.vo';
 import { BookIsbn } from './value-object/bookIsbn.vo';
@@ -7,15 +7,8 @@ import { BookPrice } from './value-object/bookPrice.vo';
 import { BookStatus, BookStatusType } from './value-object/bookStatus.vo';
 import { BookTitle } from './value-object/bookTitle.vo';
 
-interface BookProps {
-  title: string;
-  price: string | number;
-  isbn: string;
-  language: string;
-  status: BookStatusType;
-}
 export class Book extends AggregateRoot<BookId> {
-  private _title: BookTitle
+  private _title: BookTitle;
   private _price: BookPrice;
   private _isbn: BookIsbn;
   private _status: BookStatus;
@@ -24,7 +17,6 @@ export class Book extends AggregateRoot<BookId> {
   private constructor() {
     super();
   }
-
 
   public static create(command: CreateBookCommand): Book {
     const book = new Book();
@@ -44,31 +36,30 @@ export class Book extends AggregateRoot<BookId> {
     return book;
   }
 
-public static reconstruct(
-  id: string,
-  title: string,
-  price:number,
-  lang: string,
-  isbn: string,
-  status: BookStatusType,
-  createdAt: Date,
-  updatedAt: Date
-): Book {
-  const book = new Book();
-  book.id =BookId.create(id);
-  book._title = BookTitle.create(title)
-  book._price = BookPrice.create(price)
-  book._language =BookLanguage.create(lang)
-  book._isbn =BookIsbn.create(isbn);
-  book._status =BookStatus.from(status) 
-  book.createdAt = createdAt;
-  book.updatedAt = updatedAt;
-  return book;
-}
+  public static reconstruct(
+    id: string,
+    title: string,
+    price: number,
+    lang: string,
+    isbn: string,
+    status: BookStatusType,
+    createdAt: Date,
+    updatedAt: Date,
+  ): Book {
+    const book = new Book();
+    book.id = BookId.create(id);
+    book._title = BookTitle.create(title);
+    book._price = BookPrice.create(price);
+    book._language = BookLanguage.create(lang);
+    book._isbn = BookIsbn.create(isbn);
+    book._status = BookStatus.from(status);
+    book.createdAt = createdAt;
+    book.updatedAt = updatedAt;
+    return book;
+  }
 
-
-  public updateTitle(title:BookTitle): void {
-    this._title=title;
+  public updateTitle(title: BookTitle): void {
+    this._title = title;
     this.markAsUpdated();
   }
 
@@ -78,14 +69,13 @@ public static reconstruct(
   }
 
   public updateLanguage(language: BookLanguage): void {
-    this._language =language
+    this._language = language;
     this.markAsUpdated();
   }
   public updateStatus(status: BookStatus): void {
-    this._status=status
+    this._status = status;
     this.markAsUpdated();
   }
-
 
   // private methods
   private markAsUpdated(): void {

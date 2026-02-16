@@ -1,4 +1,4 @@
-import { ValueObject } from 'src/common/seed-works/valueObject';
+import { ValueObject } from 'src/common/seed-works/domain/valueObject';
 
 export class BookPrice extends ValueObject<number> {
   private static readonly MIN_CENTS = 0;
@@ -9,9 +9,7 @@ export class BookPrice extends ValueObject<number> {
   }
 
   static create(amount: number): BookPrice {
-    if (!Number.isFinite(amount)) {
-      throw new Error('Price must be a valid number');
-    }
+
 
     const cents = Math.round(amount * 100);
 
@@ -50,13 +48,12 @@ export class BookPrice extends ValueObject<number> {
     return BookPrice.fromCents(result);
   }
 
-
   isGreaterThan(other: BookPrice): boolean {
     return this.value > other.value;
   }
 
   isLessThan(other: BookPrice): boolean {
-    return this.value < other.value
+    return this.value < other.value;
   }
 
   equals(other: BookPrice): boolean {

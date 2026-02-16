@@ -39,11 +39,11 @@ export class BookMapper {
     entity.updatedAt = book.updatedAt;
     return entity;
   }
-static toDomainArray(entities: BookEntity[]): Book[] {
-  return entities
-    ?.map((e) => this.toDomain(e))
-    .filter((b): b is Book => b !== null) ?? [];
-}
+  static toDomainArray(entities: BookEntity[]): Book[] {
+    return entities
+      ?.map((e) => this.toDomain(e))
+      .filter((b): b is Book => b !== null) ?? [];
+  }
 
   static toPersistenceArray(books: Book[]): BookEntity[] {
     return books?.map((b) => this.toPersistence(b)) ?? [];

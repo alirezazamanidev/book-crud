@@ -1,12 +1,12 @@
 import { randomUUID } from 'crypto';
-import { ValueObject } from 'src/common/seed-works/valueObject';
+import { ValueObject } from 'src/common/seed-works/domain/valueObject';
 
 export class BookId extends ValueObject<string> {
   private static readonly UUID_V4_REGEX =
     /^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i;
   private static readonly UUID_V4_LENGTH = 36;
 
-  private constructor({value}:{value:string}) {
+  private constructor({ value }: { value: string }) {
     super({ value });
   }
   public static create(id: string): BookId {

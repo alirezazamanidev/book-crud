@@ -1,16 +1,19 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { BOOK_REPOSITORY } from '../../book.constants';
 import type { IBookRepository } from '../../domain/repositories/book.repository.port';
-import { Book } from '../../domain/Book';
+import { IUseCase } from 'src/common/seed-works/application/use-case.interface';
+import { BookResponseDto } from '../../presentation/dtos/book-response.dto';
 
 @Injectable()
-export class GetAllBooksUseCase {
+export class GetAllBooksUseCase implements IUseCase<undefined,BookResponseDto[]>{
   constructor(
     @Inject(BOOK_REPOSITORY)
     private readonly bookRepository: IBookRepository,
   ) {}
 
-  execute() {
-    return this.bookRepository.findAll();
+ async execute():Promise<BookResponseDto[]> {
+    const books= await this.bookRepository.findAll();
+      return books.map((book) => BookResponseDto.fromDomain(book));
+
   }
 }

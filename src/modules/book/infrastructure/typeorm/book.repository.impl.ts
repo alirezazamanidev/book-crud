@@ -25,7 +25,7 @@ export class TypeOrmBookRepository implements IBookRepository {
     }
   }
   async findById(id: BookId): Promise<Book | null> {
-    try {
+
       const entity = await this.bookRepository.findOne({
         where: { id: id.value },
       });
@@ -35,10 +35,7 @@ export class TypeOrmBookRepository implements IBookRepository {
       }
 
       return BookMapper.toDomain(entity);
-    } catch (error) {
-      this.logger.error(`Failed to find book by id ${id.value}:`, error);
-      throw new Error(`Failed to find book: ${error.message}`);
-    }
+
   }
   async findByIsbn(isbn: BookIsbn): Promise<Book | null> {
     try {
@@ -83,14 +80,11 @@ export class TypeOrmBookRepository implements IBookRepository {
     }
   }
   async exists(id: BookId): Promise<boolean> {
-    try {
+
       const count = await this.bookRepository.count({
         where: { id: id.value },
       });
       return count > 0;
-    } catch (error) {
-      this.logger.error(`Failed to check book existence ${id.value}:`, error);
-      throw new Error(`Failed to check book existence: ${error.message}`);
-    }
+
   }
 }

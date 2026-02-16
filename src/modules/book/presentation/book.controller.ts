@@ -35,26 +35,24 @@ export class BookControoler {
     const book = await this.createBookUseCase.execute({
       title: dto.title,
       status: dto.status,
-      price: dto.price,
+      price: Number(dto.price),
       language: dto.language,
       isbn: dto.isbn,
     });
 
     return {
       message: 'created',
-      book: BookResponseDto.fromDomain(book),
+      book,
     };
   }
 
   @Get()
   async findAll() {
-    const books = await this.getAllBooksUseCase.execute();
-    return books.map((book) => BookResponseDto.fromDomain(book));
+    return this.getAllBooksUseCase.execute();
   }
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<BookResponseDto> {
-    const book = await this.getBookByIdUseCase.execute(id);
-    return BookResponseDto.fromDomain(book);
+  findOne(@Param('id') id: string): Promise<BookResponseDto> {
+    return this.getBookByIdUseCase.execute(id);
   }
   @Put(':id')
   async update(@Param('id') id: string, @Body() dto: UpdateBookDto) {
@@ -62,13 +60,13 @@ export class BookControoler {
       id,
       title: dto.title,
       status: dto.status,
-      price: dto.price,
+      price: Number(dto.price),
       language: dto.language,
     });
     return {
-        messsage:'update successFully!',
-        newBook:BookResponseDto.fromDomain(book)
-    }
+      messsage: 'update successFully!',
+      newBook: BookResponseDto.fromDomain(book),
+    };
   }
   @Delete(':id')
   async remove(@Param('id') id: string) {

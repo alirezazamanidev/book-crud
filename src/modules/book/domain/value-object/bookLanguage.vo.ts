@@ -1,4 +1,4 @@
-import { ValueObject } from 'src/common/seed-works/valueObject';
+import { ValueObject } from 'src/common/seed-works/domain/valueObject';
 
 export class BookLanguage extends ValueObject<string> {
   private static readonly LANGUAGES = {
@@ -34,7 +34,7 @@ export class BookLanguage extends ValueObject<string> {
   get code(): string {
     return BookLanguage.LANGUAGES[this.value];
   }
-  get isRtl():boolean{
+  get isRtl(): boolean {
     return BookLanguage.LANGUAGES[this.value].rtl;
   }
 }

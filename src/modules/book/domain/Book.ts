@@ -19,37 +19,37 @@ export class Book extends AggregateRoot<BookId> {
 
   public updateTitle(title: string): void {
 
-    (this as any)._title = title;
+    this.title = title;
     this.markAsUpdated();
   }
 
   public updatePrice(price: BookPrice): void {
-    this._price = price;
+    this.price = price;
     this.markAsUpdated();
   }
 
   public updateStatus(status: BookStatus): void {
-    this._status = status;
+    this.status = status;
     this.markAsUpdated();
   }
 
   public publish(): void {
-    if (!this._status.canBePublished()) {
+    if (!this.status.canBePublished()) {
       throw new Error(
-        `Cannot publish book. Current status: ${this._status.value}`,
+        `Cannot publish book. Current status: ${this.status.value}`,
       );
     }
-    this._status = BookStatus.published();
+    this.status = BookStatus.published();
     this.markAsUpdated();
   }
 
   public archive(): void {
-    if (!this._status.canBeArchived()) {
+    if (!this.status.canBeArchived()) {
       throw new Error(
-        `Cannot archive book. Current status: ${this._status.value}`,
+        `Cannot archive book. Current status: ${this.status.value}`,
       );
     }
-    this._status = BookStatus.archived();
+    this.status = BookStatus.archived();
     this.markAsUpdated();
   }
 

@@ -44,27 +44,27 @@ export class Book extends AggregateRoot<BookId> {
     return book;
   }
 
-// public static reconstruct(
-//   id: BookId,
-//   title: string,
-//   price: BookPrice,
-//   lang: BookLanguage,
-//   isbn: BookIsbn,
-//   status: BookStatus,
-//   createdAt: Date,
-//   updatedAt: Date
-// ): Book {
-//   const book = new Book();
-//   book.id = id;
-//   book.title = title;
-//   book.price = price;
-//   book.language = lang;
-//   book.isbn = isbn;
-//   book.status = status;
-//   book.createdAt = createdAt;
-//   book.updatedAt = updatedAt;
-//   return book;
-// }
+public static reconstruct(
+  id: string,
+  title: string,
+  price:number,
+  lang: string,
+  isbn: string,
+  status: BookStatusType,
+  createdAt: Date,
+  updatedAt: Date
+): Book {
+  const book = new Book();
+  book.id =BookId.create(id);
+  book._title = BookTitle.create(title)
+  book._price = BookPrice.create(price)
+  book._language =BookLanguage.create(lang)
+  book._isbn =BookIsbn.create(isbn);
+  book._status =BookStatus.from(status) 
+  book.createdAt = createdAt;
+  book.updatedAt = updatedAt;
+  return book;
+}
 
 
   public updateTitle(title:BookTitle): void {

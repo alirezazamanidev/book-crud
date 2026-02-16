@@ -22,7 +22,7 @@ export class BookEntity {
  @Column({ type: 'varchar', length: 10 })
   language: string 
   @Column({ type: 'varchar', length: 20, default: 'DRAFT' })
-  status: string;
+  status: string
 
   @CreateDateColumn()
   createdAt: Date;

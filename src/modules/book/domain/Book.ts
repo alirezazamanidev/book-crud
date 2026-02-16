@@ -8,13 +8,102 @@ import { BookStatus } from "./value-object/bookStatus.vo";
 export class Book extends AggregateRoot<BookId> {
 
   private _title: string;
+  private _price: BookPrice;
+  private _isbn: BookIsbn
+  private _status: BookStatus
 
-  private _price:BookPrice;
-  private _isbn:BookIsbn
-  private status:BookStatus
-
-  private constructor(){
+  private constructor() {
     super()
+  }
+
+
+  public updateTitle(title: string): void {
+
+    (this as any)._title = title;
+    this.markAsUpdated();
+  }
+
+  public updatePrice(price: BookPrice): void {
+    this._price = price;
+    this.markAsUpdated();
+  }
+
+  public updateStatus(status: BookStatus): void {
+    this._status = status;
+    this.markAsUpdated();
+  }
+
+  public publish(): void {
+    if (!this._status.canBePublished()) {
+      throw new Error(
+        `Cannot publish book. Current status: ${this._status.value}`,
+      );
+    }
+    this._status = BookStatus.published();
+    this.markAsUpdated();
+  }
+
+  public archive(): void {
+    if (!this._status.canBeArchived()) {
+      throw new Error(
+        `Cannot archive book. Current status: ${this._status.value}`,
+      );
+    }
+    this._status = BookStatus.archived();
+    this.markAsUpdated();
+  }
+
+
+  // private methods
+  private markAsUpdated(): void {
+    this.updatedAt = new Date();
+  }
+  //setter
+  public set title(title: string) {
+    if (!title || typeof title !== 'string') {
+      throw new Error('Book title is required');
+    }
+
+    const trimmedTitle = title.trim();
+    if (trimmedTitle.length < 3) {
+      throw new Error(
+        'Book title must be at least 3 characters long',
+      );
+    }
+
+    if (trimmedTitle.length > 255) {
+      throw new Error(
+        'Book title must not exceed 255 characters',
+      );
+    }
+    this._title = title;
+  }
+  public set status(status: BookStatus) {
+    this._status = status;
+  }
+  public set price(price: BookPrice) {
+    this._price = price;
+  }
+  public set isbn(isbn: BookIsbn) {
+    this._isbn = isbn;
+  }
+
+  //getter
+
+  public get title(): string {
+    return this._title;
+  }
+
+  public get price(): BookPrice {
+    return this._price;
+  }
+
+  public get isbn(): BookIsbn {
+    return this._isbn;
+  }
+
+  public get status(): BookStatus {
+    return this._status;
   }
 
 }

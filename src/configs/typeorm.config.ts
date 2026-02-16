@@ -8,6 +8,7 @@ export class TypeOrmDbConfig implements TypeOrmOptionsFactory {
     connectionName?: string,
   ): Promise<TypeOrmModuleOptions> | TypeOrmModuleOptions {
     const dbConfig = this.configService.get('Db');
+    
     return {
       type: 'postgres',
       host: dbConfig.host,
@@ -16,6 +17,7 @@ export class TypeOrmDbConfig implements TypeOrmOptionsFactory {
       password: dbConfig.password,
       database:dbConfig.name,
       autoLoadEntities: true,
+     
       synchronize: true,
       
     };

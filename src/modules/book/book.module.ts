@@ -5,12 +5,14 @@ import { BOOK_REPOSITORY } from "./book.constants";
 import { TypeOrmBookRepository } from "./infrastructure/typeorm/book.repository.impl";
 import { CreateBookUseCase } from "./application/use-cases/create-book.use-case";
 import { BookControoler } from "./presentation/book.controller";
+import { DeleteBookUseCase } from "./application/use-cases/delete-book.use-case";
 
 @Module({
   imports:[TypeOrmModule.forFeature([BookEntity])],
   controllers:[BookControoler],
   providers:[
     CreateBookUseCase,
+    DeleteBookUseCase,
 
     {
       provide:BOOK_REPOSITORY,

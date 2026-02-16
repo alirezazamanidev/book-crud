@@ -1,82 +1,80 @@
-import { AggregateRoot } from "../../../common/seed-works/aggregateRoot";
-import { CreateBookCommand } from "../application/commands/create-book.command";
-import { BookId } from "./value-object/bookId.vo";
-import { BookIsbn } from "./value-object/bookIsbn.vo";
-import { BookLanguage } from "./value-object/bookLanguage.vo";
-import { BookPrice } from "./value-object/bookPrice.vo";
-import { BookStatus, BookStatusType } from "./value-object/bookStatus.vo";
+import { AggregateRoot } from '../../../common/seed-works/aggregateRoot';
+import { CreateBookCommand } from '../application/commands/create-book.command';
+import { BookId } from './value-object/bookId.vo';
+import { BookIsbn } from './value-object/bookIsbn.vo';
+import { BookLanguage } from './value-object/bookLanguage.vo';
+import { BookPrice } from './value-object/bookPrice.vo';
+import { BookStatus, BookStatusType } from './value-object/bookStatus.vo';
 
 interface BookProps {
   title: string;
   price: string | number;
   isbn: string;
-  language?: string;
-  status?: BookStatusType;
+  language: string;
+  status: BookStatusType;
 }
 export class Book extends AggregateRoot<BookId> {
-
   private _title: string;
   private _price: BookPrice;
-  private _isbn: BookIsbn
-  private _status: BookStatus
-  private _language: BookLanguage
+  private _isbn: BookIsbn;
+  private _status: BookStatus;
+  private _language: BookLanguage;
 
   private constructor() {
-    super()
+    super();
   }
 
-
-  public  static create(command:CreateBookCommand):Book{
-    const book=new Book();
-    book.id=BookId.generate();
-    book.isbn=BookIsbn.create(command.isbn);
-    book.language=BookLanguage.create(command.language);
-    book.status=command.status ? BookStatus.from(command.status):BookStatus.draft();
-    book.title=command.title;
-    book.price=BookPrice.create(command.price);
-    book.createdAt=new Date()
-    book.updatedAt=new Date()
+  public static create(command: CreateBookCommand): Book {
+    const book = new Book();
+    book.id = BookId.generate();
+    book.isbn = BookIsbn.create(command.isbn);
+    book.language = BookLanguage.create(command.language);
+    book.status = command.status
+      ? BookStatus.from(command.status)
+      : BookStatus.draft();
+    book.title = command.title;
+    book.price = BookPrice.create(command.price);
+    book.createdAt = new Date();
+    book.updatedAt = new Date();
     return book;
-
   }
-
-
   public static reconstruct(
     id: BookId,
     title: string,
     price: BookPrice,
-    lang:BookLanguage,
+    lang: BookLanguage,
     isbn: BookIsbn,
     status: BookStatus,
-
   ): Book {
-
     const book = new Book();
     book.id = id;
     book.title = title;
     book.price = price;
     book.isbn = isbn;
-    book.language=lang;
+    book.language = lang;
     book.status = status;
-    book.createdAt =new Date()
-    book.updatedAt =new Date()
+    book.createdAt = new Date();
+    book.updatedAt = new Date();
 
     return book;
   }
 
   public updateTitle(title: string): void {
-
     this.title = title;
     this.markAsUpdated();
   }
 
-  public updatePrice(price: BookPrice): void {
-    this.price = price;
+  public updatePrice(price: string): void {
+    this.price = BookPrice.create(price);
     this.markAsUpdated();
   }
 
-  public updateStatus(status: BookStatus): void {
-    this.status = status;
+  public updateLanguage(language: string): void {
+    this.language = BookLanguage.create(language);
+    this.markAsUpdated();
+  }
+  public updateStatus(status: string): void {
+    this.status = BookStatus.from(status as any)
     this.markAsUpdated();
   }
 
@@ -100,7 +98,6 @@ export class Book extends AggregateRoot<BookId> {
     this.markAsUpdated();
   }
 
-
   // private methods
   private markAsUpdated(): void {
     this.updatedAt = new Date();
@@ -113,15 +110,11 @@ export class Book extends AggregateRoot<BookId> {
 
     const trimmedTitle = title.trim();
     if (trimmedTitle.length < 3) {
-      throw new Error(
-        'Book title must be at least 3 characters long',
-      );
+      throw new Error('Book title must be at least 3 characters long');
     }
 
     if (trimmedTitle.length > 255) {
-      throw new Error(
-        'Book title must not exceed 255 characters',
-      );
+      throw new Error('Book title must not exceed 255 characters');
     }
     this._title = title;
   }
@@ -134,15 +127,15 @@ export class Book extends AggregateRoot<BookId> {
   public set isbn(isbn: BookIsbn) {
     this._isbn = isbn;
   }
-  public set language(lang:BookLanguage){
-    this._language=lang
+  public set language(lang: BookLanguage) {
+    this._language = lang;
   }
   //getter
 
   public get title(): string {
     return this._title;
   }
-public get language(): BookLanguage {
+  public get language(): BookLanguage {
     return this._language;
   }
   public get price(): BookPrice {
@@ -156,5 +149,4 @@ public get language(): BookLanguage {
   public get status(): BookStatus {
     return this._status;
   }
-
 }

@@ -1,18 +1,18 @@
 import { ValueObject } from 'src/common/seed-works/valueObject';
 export type BookStatusType = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
 
-export class BookStatus extends ValueObject<BookStatusType> {
-  private static readonly VALID_STATUSES: readonly BookStatusType[] = [
+export class BookStatus extends ValueObject<string> {
+  private static readonly VALID_STATUSES: readonly string[] = [
     'DRAFT',
     'PUBLISHED',
     'ARCHIVED',
   ] as const;
 
-  private constructor(value: BookStatusType) {
+  private constructor(value: string) {
     super({ value });
   }
 
-  public static from(value: BookStatusType): BookStatus {
+  public static from(value: string): BookStatus {
     if (!BookStatus.VALID_STATUSES.includes(value)) {
       throw new Error(
         `Invalid book status. Valid statuses are: ${BookStatus.VALID_STATUSES.join(', ')}`,

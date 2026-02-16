@@ -7,6 +7,7 @@ import {
   HttpStatus,
   Param,
   Post,
+  Put,
 } from '@nestjs/common';
 import { CreateBookUseCase } from '../application/use-cases/create-book.use-case';
 import { CreateBookDto } from './dtos/create-book.dto';
@@ -15,6 +16,8 @@ import { DeleteBookUseCase } from '../application/use-cases/delete-book.use-case
 import { DeleteBookCommand } from '../application/commands/delete-book.command';
 import { GetAllBooksUseCase } from '../application/use-cases/get-all-books.use-case';
 import { GetBookByIdUseCase } from '../application/use-cases/get-book-by-id.use-case';
+import { UpdateBookDto } from './dtos/update-book.dto';
+import { UpdateBookUseCase } from '../application/use-cases/update-book.use-case';
 
 @Controller('books')
 export class BookControoler {
@@ -23,6 +26,7 @@ export class BookControoler {
     private readonly getAllBooksUseCase: GetAllBooksUseCase,
     private readonly deleteBookUseCase: DeleteBookUseCase,
     private readonly getBookByIdUseCase: GetBookByIdUseCase,
+    private readonly updateBookUseCase: UpdateBookUseCase,
   ) {}
 
   @Post()
@@ -52,7 +56,20 @@ export class BookControoler {
     const book = await this.getBookByIdUseCase.execute(id);
     return BookResponseDto.fromDomain(book);
   }
-
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() dto: UpdateBookDto) {
+    const book = await this.updateBookUseCase.execute({
+      id,
+      title: dto.title,
+      status: dto.status,
+      price: dto.price,
+      language: dto.language,
+    });
+    return {
+        messsage:'update successFully!',
+        newBook:BookResponseDto.fromDomain(book)
+    }
+  }
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const command: DeleteBookCommand = { id };

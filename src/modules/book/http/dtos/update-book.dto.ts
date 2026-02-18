@@ -1,13 +1,14 @@
 import {
   IsString,
-  IsNumber,
   IsOptional,
   IsEnum,
   MinLength,
   Min,
   MaxLength,
-  IsNumberString,
+  IsNumber,
 } from 'class-validator';
+import { Type } from 'class-transformer';
+import { BookStatus } from './create-book.dto';
 
 export class UpdateBookDto {
   @IsOptional()
@@ -17,15 +18,16 @@ export class UpdateBookDto {
   title?: string;
 
   @IsOptional()
-  @IsNumberString()
-  price?: string
-
+  @IsNumber()
+  @Min(0, { message: 'Price must be zero or positive' })
+  @Type(() => Number)
+  price?: number;
 
   @IsOptional()
   @IsString()
   language?: string;
 
   @IsOptional()
-  @IsEnum(['DRAFT', 'PUBLISHED', 'ARCHIVED'])
-  status?: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
+  @IsEnum(BookStatus)
+  status?: BookStatus;
 }

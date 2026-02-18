@@ -1,35 +1,38 @@
+import { randomUUID } from 'crypto';
 import { AggregateRoot } from '../../../common/seed-works/domain/aggregateRoot';
-import { CreateBookCommand } from '../application/commands/create-book.command';
-import { BookId } from './value-object/bookId.vo';
-import { BookIsbn } from './value-object/bookIsbn.vo';
-import { BookLanguage } from './value-object/bookLanguage.vo';
-import { BookPrice } from './value-object/bookPrice.vo';
-import { BookStatus, BookStatusType } from './value-object/bookStatus.vo';
-import { BookTitle } from './value-object/bookTitle.vo';
 
-export class Book extends AggregateRoot<BookId> {
-  private _title: BookTitle;
-  private _price: BookPrice;
-  private _isbn: BookIsbn;
-  private _status: BookStatus;
-  private _language: BookLanguage;
+export class Book extends AggregateRoot<string> {
+  private _title: string;
+  private _price: number;
+  private _isbn: string;
+  private _status: string;
+  private _language: string;
 
   private constructor() {
     super();
   }
 
-  public static create(command: CreateBookCommand): Book {
+  public static create({
+    title,
+    price,
+    isbn,
+    status,
+    lang,
+  }: {
+    title: string;
+    price:number
+    isbn: string;
+    status: string;
+    lang: string;
+  }): Book {
     const book = new Book();
 
-    book.id = BookId.generate();
-    book._title = BookTitle.create(command.title);
-    book._price = BookPrice.create(command.price);
-    book._isbn = BookIsbn.create(command.isbn);
-    book._language = BookLanguage.create(command.language);
-    book._status = command.status
-      ? BookStatus.from(command.status)
-      : BookStatus.draft();
-
+    book.id = randomUUID().toString();
+    book._title = title;
+    book._price = price;
+    book._language = lang;
+    book._status = status;
+    book._isbn = isbn;
     book.createdAt = new Date();
     book.updatedAt = new Date();
 
@@ -39,40 +42,40 @@ export class Book extends AggregateRoot<BookId> {
   public static reconstruct(
     id: string,
     title: string,
-    price: number,
+    price:number,
     lang: string,
     isbn: string,
-    status: BookStatusType,
+    status: string,
     createdAt: Date,
     updatedAt: Date,
   ): Book {
     const book = new Book();
-    book.id = BookId.create(id);
-    book._title = BookTitle.create(title);
-    book._price = BookPrice.create(price);
-    book._language = BookLanguage.create(lang);
-    book._isbn = BookIsbn.create(isbn);
-    book._status = BookStatus.from(status);
+    book.id = id;
+    book._title = title;
+    book._price = price;
+    book._language = lang
+    book._isbn =isbn
+    book._status =status;
     book.createdAt = createdAt;
     book.updatedAt = updatedAt;
     return book;
   }
 
-  public updateTitle(title: BookTitle): void {
+  public updateTitle(title: string): void {
     this._title = title;
     this.markAsUpdated();
   }
 
-  public updatePrice(price: BookPrice): void {
+  public updatePrice(price: number): void {
     this._price = price;
     this.markAsUpdated();
   }
 
-  public updateLanguage(language: BookLanguage): void {
+  public updateLanguage(language:string): void {
     this._language = language;
     this.markAsUpdated();
   }
-  public updateStatus(status: BookStatus): void {
+  public updateStatus(status:string): void {
     this._status = status;
     this.markAsUpdated();
   }
@@ -84,21 +87,21 @@ export class Book extends AggregateRoot<BookId> {
 
   //getter
 
-  public get title(): BookTitle {
+  public get title():string{
     return this._title;
   }
-  public get language(): BookLanguage {
+  public get language(): string {
     return this._language;
   }
-  public get price(): BookPrice {
+  public get price():number {
     return this._price;
   }
 
-  public get isbn(): BookIsbn {
+  public get isbn(): string {
     return this._isbn;
   }
 
-  public get status(): BookStatus {
+  public get status(): string {
     return this._status;
   }
 }

@@ -129,3 +129,27 @@ sequenceDiagram
     end
 
 ```
+## ۵. حذف کتاب (Delete Book)
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Client
+    participant BookController
+    participant BookService
+    participant IBookRepository
+    participant TypeOrmBookRepository
+    participant DB as PostgreSQL
+
+    Client->>BookController: DELETE /books/:id
+    BookController->>BookService: delete(id)
+
+    BookService->>IBookRepository: delete(id)
+    IBookRepository->>TypeOrmBookRepository: delete(id)
+    TypeOrmBookRepository->>DB: DELETE FROM books WHERE id = ?
+    DB-->>TypeOrmBookRepository: result (affected)
+    TypeOrmBookRepository-->>BookService: void
+
+    BookService-->>BookController: { message, bookId }
+    BookController-->>Client: 200 OK + body
+```

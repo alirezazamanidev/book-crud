@@ -8,7 +8,7 @@ import {
   IsNumber,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { BookStatus } from './create-book.dto';
+import { BookStatus } from '../../../../prisma/generated/enums';
 
 export class UpdateBookDto {
   @IsOptional()

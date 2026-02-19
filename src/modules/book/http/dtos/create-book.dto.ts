@@ -1,19 +1,15 @@
+import { Type } from 'class-transformer';
 import {
-  IsString,
+  IsEnum,
   IsNumber,
   IsOptional,
-  IsEnum,
-  MinLength,
-  Min,
+  IsString,
   MaxLength,
+  Min,
+  MinLength,
 } from 'class-validator';
-import { Type } from 'class-transformer';
+import { BookStatus } from '../../../../prisma/generated/enums';
 
-export enum BookStatus {
-  DRAFT = 'DRAFT',
-  PUBLISHED = 'PUBLISHED',
-  ARCHIVED = 'ARCHIVED',
-}
 
 export class CreateBookDto {
   @IsString()

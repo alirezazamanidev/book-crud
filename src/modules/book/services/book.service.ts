@@ -6,10 +6,11 @@ import {
 } from '@nestjs/common';
 import { BOOK_REPOSITORY } from '../book.constants';
 import type { IBookRepository } from '../domain/repositories/book.repository.port';
-import { CreateBookDto, BookStatus } from '../http/dtos/create-book.dto';
+import { CreateBookDto } from '../http/dtos/create-book.dto';
 import { Book } from '../domain/Book';
 import { BookResponseDto } from '../http/dtos/book-response.dto';
 import { UpdateBookDto } from '../http/dtos/update-book.dto';
+import { BookStatus } from '../../../prisma/generated/enums';
 
 
 @Injectable()
@@ -19,7 +20,7 @@ export class BookService {
   ) {}
 
   async create(dto: CreateBookDto) {
-    
+
     const existingBook = await this.bookRepository.findByIsbn(dto.isbn);
     if (existingBook) {
       throw new ConflictException(
@@ -45,7 +46,7 @@ export class BookService {
     return books.map((book) => BookResponseDto.fromDomain(book));
   }
   async findOne(id: string) {
-   
+
     const book = await this.bookRepository.findById(id);
     if (!book) throw new NotFoundException('The book not founded!');
 

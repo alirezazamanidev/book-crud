@@ -1,87 +1,99 @@
-import { InjectRepository } from '@nestjs/typeorm';
-import { IBookRepository } from '../domain/repositories/book.repository.port';
-import { Injectable, Logger } from '@nestjs/common';
-import { BookEntity } from '../entities/book.entity';
-import { Repository } from 'typeorm';
+import { Inject, Injectable, Logger } from '@nestjs/common';
+
+import { BookStatus } from '../../../prisma/generated/enums';
 import { Book } from '../domain/Book';
+import type { IBookRepository } from '../domain/repositories/book.repository.port';
 import { BookMapper } from './book.mapper';
+import { PrismaClient } from '../../../prisma/generated/client';
+import { PRISMA_PROVIDER } from '../../../common/constants/global.constants';
+
 @Injectable()
-export class TypeOrmBookRepository implements IBookRepository {
-  private readonly logger = new Logger(TypeOrmBookRepository.name);
+export class PrismaBookRepository implements IBookRepository {
+  private readonly logger = new Logger(PrismaBookRepository.name);
 
-  constructor(
-    @InjectRepository(BookEntity)
-    private readonly bookRepository: Repository<BookEntity>,
-  ) {}
+  constructor(@Inject(PRISMA_PROVIDER) private readonly prisma: PrismaClient) { }
 
-  async save(book: Book) {
+  async save(book: Book): Promise<void> {
     try {
-      const entity = BookMapper.toPersistence(book);
-      await this.bookRepository.save(entity);
+      const data = BookMapper.toPersistence(book);
+      await this.prisma.book.upsert({
+        where: { id: book.id },
+        create: {
+          id: data.id!,
+          title: data.title,
+          price: data.price,
+          isbn: data.isbn,
+          language: data.language,
+          status: data.status as BookStatus,
+          createdAt: data.createdAt,
+          updatedAt: data.updatedAt,
+        },
+        update: {
+          title: data.title,
+          price: data.price,
+          language: data.language,
+          status: data.status as BookStatus,
+          updatedAt: data.updatedAt,
+        },
+      });
       this.logger.debug(`Book saved: ${book.id}`);
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
       this.logger.error(`Failed to save book ${book.id}:`, error);
-      throw new Error(`Failed to save book: ${error.message}`);
+      throw new Error(`Failed to save book: ${message}`);
     }
   }
-  async findById(id:string): Promise<Book | null> {
-    const entity = await this.bookRepository.findOne({
-      where: { id: id },
+
+  async findById(id: string): Promise<Book | null> {
+    const entity = await this.prisma.book.findUnique({
+      where: { id },
     });
-
-    if (!entity) {
-      return null;
-    }
-
     return BookMapper.toDomain(entity);
   }
+
   async findByIsbn(isbn: string): Promise<Book | null> {
     try {
-      const entity = await this.bookRepository.findOne({
-        where: { isbn: isbn },
+      const entity = await this.prisma.book.findUnique({
+        where: { isbn },
       });
-
-      if (!entity) {
-        return null;
-      }
-
       return BookMapper.toDomain(entity);
     } catch (error) {
       this.logger.error(`Failed to find book by ISBN ${isbn}:`, error);
-      throw new Error(`Failed to find book by ISBN: ${error.message}`);
+      const message = error instanceof Error ? error.message : String(error);
+      throw new Error(`Failed to find book by ISBN: ${message}`);
     }
   }
 
   async findAll(): Promise<Book[]> {
     try {
-      const entities = await this.bookRepository.find({
-        order: { createdAt: 'DESC' },
+      const entities = await this.prisma.book.findMany({
+        orderBy: { createdAt: 'desc' },
       });
-
       return BookMapper.toDomainArray(entities);
     } catch (error) {
       this.logger.error('Failed to find all books:', error);
-      throw new Error(`Failed to find all books: ${error.message}`);
+      const message = error instanceof Error ? error.message : String(error);
+      throw new Error(`Failed to find all books: ${message}`);
     }
   }
-  async delete(id:string): Promise<void> {
+
+  async delete(id: string): Promise<void> {
     try {
-      
-      const result = await this.bookRepository.delete(id);
-      if (result.affected === 0) {
+      const result = await this.prisma.book.deleteMany({ where: { id } });
+      if (result.count === 0) {
         this.logger.warn(`Book with id ${id} was not found for deletion`);
       } else {
         this.logger.debug(`Book deleted: ${id}`);
       }
     } catch (error) {
       this.logger.error(`Failed to delete book ${id}:`, error);
-      throw new Error(`Failed to delete book: ${error.message}`);
+      const message = error instanceof Error ? error.message : String(error);
+      throw new Error(`Failed to delete book: ${message}`);
     }
   }
+
   async exists(id: string): Promise<boolean> {
-    const count = await this.bookRepository.count({
-      where: { id },
-    });
+    const count = await this.prisma.book.count({ where: { id } });
     return count > 0;
   }
 }

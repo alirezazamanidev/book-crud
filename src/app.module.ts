@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { configurations } from './configs/env.config';
-import { TypeOrmDbConfig } from './configs/typeorm.config';
+import { ConfigModule } from '@nestjs/config';
 import { BookModule } from './modules/book/book.module';
+
+import { configurations } from './configs/env.config';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
   imports: [
@@ -13,12 +13,9 @@ import { BookModule } from './modules/book/book.module';
       cache: true,
       load: configurations,
     }),
-    TypeOrmModule.forRootAsync({
-      inject: [ConfigService],
-      useClass: TypeOrmDbConfig,
-    }),
-    BookModule
+    PrismaModule,
+    BookModule,
   ],
 
 })
-export class AppModule {}
+export class AppModule { }

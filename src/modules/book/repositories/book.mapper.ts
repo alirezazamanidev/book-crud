@@ -1,11 +1,15 @@
-import { Book } from '../domain/Book';
-import { BookEntity } from '../entities/book.entity';
 
+import { Book } from '../domain/Book';
+import type { Book as BookEntity } from '../../../prisma/generated/client';
+/** Maps between domain Book and Prisma Book model. */
 export class BookMapper {
-  public static toDomain(entity: BookEntity): Book | null {
+  static toDomain(entity: BookEntity | null): Book | null {
     if (!entity) return null;
-    const price = typeof entity.price === 'string' ? Number(entity.price) : entity.price;
-    const book = Book.reconstruct(
+    const price =
+      typeof entity.price === 'object' && entity.price !== null && 'toNumber' in entity.price
+        ? (entity.price as { toNumber(): number }).toNumber()
+        : Number(entity.price);
+    return Book.reconstruct(
       entity.id,
       entity.title,
       price,
@@ -15,31 +19,27 @@ export class BookMapper {
       entity.createdAt,
       entity.updatedAt,
     );
-    return book;
   }
 
-  // ---------- Domain -> DB Entity ----------
-  static toPersistence(book: Book): BookEntity {
-    const entity = new BookEntity();
-    entity.id = book.id;
-    entity.title = book.title;
-    entity.price = book.price;
-    entity.language = book.language;
-    entity.isbn = book.isbn;
-    entity.status = book.status;
-    entity.createdAt = book.createdAt;
-    entity.updatedAt = book.updatedAt;
-    return entity;
+  /** Domain -> Prisma create/update payload (no id for create). */
+  static toPersistence(book: Book) {
+    return {
+      id: book.id,
+      title: book.title,
+      price: book.price,
+      language: book.language,
+      isbn: book.isbn,
+      status: book.status,
+      createdAt: book.createdAt,
+      updatedAt: book.updatedAt,
+    };
   }
-  static toDomainArray(entities: BookEntity[]): Book[] {
+
+  static toDomainArray(entities: BookEntity[]){
     return (
       entities
         ?.map((e) => this.toDomain(e))
         .filter((b): b is Book => b !== null) ?? []
     );
-  }
-
-  static toPersistenceArray(books: Book[]): BookEntity[] {
-    return books?.map((b) => this.toPersistence(b)) ?? [];
   }
 }

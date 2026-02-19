@@ -35,5 +35,28 @@ sequenceDiagram
         Service-->>Controller: BookResponseDto
         Controller-->>Client: 201 Created
     end
-                                
+
+```
+
+## ۲. دریافت همه کتاب‌ها (Find All)
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Client
+    participant Controller
+    participant Service
+    participant BookRepository
+    participant DB
+
+    Client->>Controller: GET /books
+    Controller->>Service: findAll()
+
+    Service->>BookRepository: findAll()
+    BookRepository->>DB: SELECT id, title, price, isbn, lang, status FROM books ORDER BY createdAt DESC
+    DB-->>BookRepository: rows
+
+    BookRepository-->>Service: BookReadModel[]
+    Service-->>Controller: BookResponseDto[]
+    Controller-->>Client: 200 OK
 ```

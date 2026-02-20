@@ -13,9 +13,6 @@ sequenceDiagram
     box rgb(1, 31, 1) DB
     participant Database@{"type":"database"}
     end
-
-    title Sequence Diagram for Create Operation in CRUD API
-
     Note over Client: User provides data for new resource (e.g., book details like title, price, ISBN, language, optional status)
     Client->>API: Send create request (e.g., POST) with data payload
     Note over API: Receive request, perform initial validation on input data

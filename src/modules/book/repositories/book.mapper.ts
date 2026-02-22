@@ -1,6 +1,6 @@
 
+import type { Book as BookEntity } from '../../prisma/generated/client';
 import { Book } from '../domain/Book';
-import type { Book as BookEntity } from '../../../prisma/generated/client';
 /** Maps between domain Book and Prisma Book model. */
 export class BookMapper {
   static toDomain(entity: BookEntity | null): Book | null {
@@ -35,7 +35,7 @@ export class BookMapper {
     };
   }
 
-  static toDomainArray(entities: BookEntity[]){
+  static toDomainArray(entities: BookEntity[]) {
     return (
       entities
         ?.map((e) => this.toDomain(e))

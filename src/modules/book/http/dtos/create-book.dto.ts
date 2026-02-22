@@ -8,7 +8,7 @@ import {
   Min,
   MinLength,
 } from 'class-validator';
-import { BookStatus } from '../../../../prisma/generated/enums';
+import { BookStatus } from '../../../prisma/generated/enums';
 
 
 export class CreateBookDto {

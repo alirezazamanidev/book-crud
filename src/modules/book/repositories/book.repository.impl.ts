@@ -1,11 +1,11 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 
-import { BookStatus } from '../../../prisma/generated/enums';
+import { PRISMA_PROVIDER } from '../../../common/constants/global.constants';
+import { PrismaClient } from '../../prisma/generated/client';
+import { BookStatus } from '../../prisma/generated/enums';
 import { Book } from '../domain/Book';
 import type { IBookRepository } from '../domain/repositories/book.repository.port';
 import { BookMapper } from './book.mapper';
-import { PrismaClient } from '../../../prisma/generated/client';
-import { PRISMA_PROVIDER } from '../../../common/constants/global.constants';
 
 @Injectable()
 export class PrismaBookRepository implements IBookRepository {

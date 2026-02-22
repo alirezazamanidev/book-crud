@@ -4,20 +4,20 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { BookStatus } from '../../prisma/generated/enums';
 import { BOOK_REPOSITORY } from '../book.constants';
-import type { IBookRepository } from '../domain/repositories/book.repository.port';
-import { CreateBookDto } from '../http/dtos/create-book.dto';
 import { Book } from '../domain/Book';
+import type { IBookRepository } from '../domain/repositories/book.repository.port';
 import { BookResponseDto } from '../http/dtos/book-response.dto';
+import { CreateBookDto } from '../http/dtos/create-book.dto';
 import { UpdateBookDto } from '../http/dtos/update-book.dto';
-import { BookStatus } from '../../../prisma/generated/enums';
 
 
 @Injectable()
 export class BookService {
   constructor(
     @Inject(BOOK_REPOSITORY) private bookRepository: IBookRepository,
-  ) {}
+  ) { }
 
   async create(dto: CreateBookDto) {
 
@@ -29,11 +29,11 @@ export class BookService {
     }
 
     const book = Book.create({
-        title:dto.title,
-        price:dto.price,
-        isbn:dto.isbn,
-        lang:dto.language,
-        status: dto.status ?? BookStatus.DRAFT
+      title: dto.title,
+      price: dto.price,
+      isbn: dto.isbn,
+      lang: dto.language,
+      status: dto.status ?? BookStatus.DRAFT
     });
     await this.bookRepository.save(book);
     return {

@@ -1,14 +1,14 @@
-import {
-  IsString,
-  IsOptional,
-  IsEnum,
-  MinLength,
-  Min,
-  MaxLength,
-  IsNumber,
-} from 'class-validator';
 import { Type } from 'class-transformer';
-import { BookStatus } from '../../../../prisma/generated/enums';
+import {
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+  MaxLength,
+  Min,
+  MinLength,
+} from 'class-validator';
+import { BookStatus } from '../../../prisma/generated/enums';
 
 export class UpdateBookDto {
   @IsOptional()

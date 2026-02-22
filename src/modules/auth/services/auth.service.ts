@@ -17,6 +17,9 @@ export class AuthService {
 
     if (!user || !(await compare(dto.password, user.hashPassword))) throw new UnauthorizedException('Invalid credentials');
 
+    user.isVerify=true;
+    await this.userRepository.save(user);
+
 
     return {
       message: 'login successfully',
@@ -37,6 +40,7 @@ export class AuthService {
       fullName: dto.fullname,
       hashPassword
     })
+    user.isVerify=true
     await this.userRepository.save(user);
 
     return {

@@ -51,6 +51,10 @@ export class User extends AggregateRoot<string> {
     return user;
   }
 
+  // setters
+  public set isVerify(value: boolean) {
+    this._isVerify = value;
+  }
   // getter
   public get fullName(): string | null {
     return this._fullName || null;

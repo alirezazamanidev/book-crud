@@ -5,32 +5,46 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider        = "prisma-client"
-  output         = "../src/modules/prisma/generated"
-  moduleFormat   = "cjs"
-
+  provider     = "prisma-client"
+  output       = "../src/modules/prisma/generated"
+  moduleFormat = "cjs"
 }
 
 datasource db {
   provider = "postgresql"
 }
 
-enum BookStatus {
-  DRAFT
-  PUBLISHED
-  ARCHIVED
+model User {
+  id          String  @id @db.Uuid
+  fullName    String? @db.VarChar(255)
+  username    String  @unique @db.VarChar(255)
+  hashPassword String @db.VarChar(255)
+  isVerify    Boolean @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  books       Book[]
+
+  @@map("users")
 }
 
 model Book {
-  id    String  @id @db.Uuid
-  title String  @db.VarChar(255)
-  price Decimal @db.Decimal(10, 2)
-
+  id        String     @id @db.Uuid
+  title     String     @db.VarChar(255)
+  price     Decimal    @db.Decimal(10, 2)
   isbn      String     @unique @db.VarChar(13)
   language  String     @db.VarChar(10)
   status    BookStatus @default(DRAFT)
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 
+  authorId  String     @db.Uuid
+  author    User       @relation(fields: [authorId], references: [id])
+
   @@map("books")
+}
+
+enum BookStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
 }

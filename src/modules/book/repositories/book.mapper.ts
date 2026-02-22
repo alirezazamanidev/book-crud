@@ -11,6 +11,7 @@ export class BookMapper {
         : Number(entity.price);
     return Book.reconstruct(
       entity.id,
+      entity.authorId,
       entity.title,
       price,
       entity.language,
@@ -25,6 +26,7 @@ export class BookMapper {
   static toPersistence(book: Book) {
     return {
       id: book.id,
+      authorId: book.authorId,
       title: book.title,
       price: book.price,
       language: book.language,

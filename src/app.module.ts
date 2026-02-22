@@ -4,6 +4,8 @@ import { BookModule } from './modules/book/book.module';
 
 import { configurations } from './configs/env.config';
 import { PrismaModule } from './modules/prisma/prisma.module';
+import { UserModule } from './modules/user/user.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -13,8 +15,10 @@ import { PrismaModule } from './modules/prisma/prisma.module';
       cache: true,
       load: configurations,
     }),
+    AuthModule,
     PrismaModule,
     BookModule,
+    UserModule,
   ],
 
 })

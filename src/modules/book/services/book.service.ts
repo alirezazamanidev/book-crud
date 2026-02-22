@@ -30,6 +30,7 @@ export class BookService {
 
     const book = Book.create({
       title: dto.title,
+      authorId: 'authorId',
       price: dto.price,
       isbn: dto.isbn,
       lang: dto.language,

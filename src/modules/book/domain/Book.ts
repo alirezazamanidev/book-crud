@@ -2,6 +2,7 @@ import { randomUUID } from 'crypto';
 import { AggregateRoot } from '../../../common/seed-works/domain/aggregateRoot';
 
 export class Book extends AggregateRoot<string> {
+  private _authorId: string;
   private _title: string;
   private _price: number;
   private _isbn: string;
@@ -13,12 +14,14 @@ export class Book extends AggregateRoot<string> {
   }
 
   public static create({
+    authorId,
     title,
     price,
     isbn,
     status,
     lang,
   }: {
+    authorId: string;
     title: string;
     price:number
     isbn: string;
@@ -28,6 +31,7 @@ export class Book extends AggregateRoot<string> {
     const book = new Book();
 
     book.id = randomUUID().toString();
+    book._authorId = authorId;
     book._title = title;
     book._price = price;
     book._language = lang;
@@ -41,6 +45,7 @@ export class Book extends AggregateRoot<string> {
 
   public static reconstruct(
     id: string,
+    authorId: string,
     title: string,
     price:number,
     lang: string,
@@ -51,6 +56,7 @@ export class Book extends AggregateRoot<string> {
   ): Book {
     const book = new Book();
     book.id = id;
+    book._authorId = authorId;
     book._title = title;
     book._price = price;
     book._language = lang
@@ -96,7 +102,9 @@ export class Book extends AggregateRoot<string> {
   public get price():number {
     return this._price;
   }
-
+  public get authorId(): string {
+    return this._authorId;
+  }
   public get isbn(): string {
     return this._isbn;
   }

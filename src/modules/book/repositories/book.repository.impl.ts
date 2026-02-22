@@ -6,12 +6,13 @@ import { BookStatus } from '../../prisma/generated/enums';
 import { Book } from '../domain/Book';
 import type { IBookRepository } from '../domain/repositories/book.repository.port';
 import { BookMapper } from './book.mapper';
+import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class PrismaBookRepository implements IBookRepository {
   private readonly logger = new Logger(PrismaBookRepository.name);
 
-  constructor(@Inject(PRISMA_PROVIDER) private readonly prisma: PrismaClient) { }
+  constructor( private readonly prisma:PrismaService) { }
 
   async save(book: Book): Promise<void> {
     try {
@@ -19,6 +20,7 @@ export class PrismaBookRepository implements IBookRepository {
       await this.prisma.book.upsert({
         where: { id: book.id },
         create: {
+          authorId: data.authorId,
           id: data.id!,
           title: data.title,
           price: data.price,

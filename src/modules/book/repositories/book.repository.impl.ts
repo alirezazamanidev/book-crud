@@ -32,6 +32,7 @@ export class PrismaBookRepository implements IBookRepository {
         },
         update: {
           title: data.title,
+          
           price: data.price,
           language: data.language,
           status: data.status as BookStatus,
@@ -46,9 +47,9 @@ export class PrismaBookRepository implements IBookRepository {
     }
   }
 
-  async findById(id: string): Promise<Book | null> {
+  async findByIdForAuthor(id: string,authorId:string): Promise<Book | null> {
     const entity = await this.prisma.book.findUnique({
-      where: { id },
+      where: { id,authorId },
     });
     return BookMapper.toDomain(entity);
   }
@@ -66,9 +67,10 @@ export class PrismaBookRepository implements IBookRepository {
     }
   }
 
-  async findAll(): Promise<Book[]> {
+  async findAllForAuthor(authorId:string): Promise<Book[]> {
     try {
       const entities = await this.prisma.book.findMany({
+        where: { authorId },
         orderBy: { createdAt: 'desc' },
       });
       return BookMapper.toDomainArray(entities);
@@ -79,9 +81,9 @@ export class PrismaBookRepository implements IBookRepository {
     }
   }
 
-  async delete(id: string): Promise<void> {
+  async deleteForAuthor(id: string,authorId:string): Promise<void> {
     try {
-      const result = await this.prisma.book.deleteMany({ where: { id } });
+      const result = await this.prisma.book.deleteMany({ where: { id,authorId } });
       if (result.count === 0) {
         this.logger.warn(`Book with id ${id} was not found for deletion`);
       } else {

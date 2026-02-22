@@ -19,7 +19,7 @@ export class BookService {
     @Inject(BOOK_REPOSITORY) private bookRepository: IBookRepository,
   ) { }
 
-  async create(dto: CreateBookDto) {
+  async create(dto: CreateBookDto,authorId:string) {
 
     const existingBook = await this.bookRepository.findByIsbn(dto.isbn);
     if (existingBook) {
@@ -27,10 +27,10 @@ export class BookService {
         `Book with ISBN "${dto.isbn}" already exists`,
       );
     }
-
+    
     const book = Book.create({
       title: dto.title,
-      authorId: 'authorId',
+      authorId,
       price: dto.price,
       isbn: dto.isbn,
       lang: dto.language,
@@ -42,19 +42,19 @@ export class BookService {
       book: BookResponseDto.fromDomain(book),
     };
   }
-  async findAll() {
-    const books = await this.bookRepository.findAll();
+  async findAll(authorId:string) {
+    const books = await this.bookRepository.findAllForAuthor(authorId);
     return books.map((book) => BookResponseDto.fromDomain(book));
   }
-  async findOne(id: string) {
+  async findOne(id: string,authorId:string) {
 
-    const book = await this.bookRepository.findById(id);
+    const book = await this.bookRepository.findByIdForAuthor(id,authorId);
     if (!book) throw new NotFoundException('The book not founded!');
 
     return BookResponseDto.fromDomain(book);
   }
-  async update(id: string, dto: UpdateBookDto) {
-    const book = await this.bookRepository.findById(id);
+  async update(id: string,authorId:string, dto: UpdateBookDto) {
+    const book = await this.bookRepository.findByIdForAuthor(id,authorId);
     if (!book) throw new NotFoundException('The book not founded');
     if (dto.title) book.updateTitle(dto.title);
     if (dto.status) book.updateStatus(dto.status);
@@ -70,8 +70,8 @@ export class BookService {
     };
   }
 
-  async delete(id: string) {
-    await this.bookRepository.delete(id);
+  async delete(id: string,authorId:string) {
+    await this.bookRepository.deleteForAuthor(id,authorId);
     return {
       message: 'Removed successfully.',
       bookId: id,

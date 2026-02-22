@@ -1,11 +1,5 @@
-/*
-  Warnings:
-
-  - Added the required column `authorId` to the `books` table without a default value. This is not possible if the table is not empty.
-
-*/
--- AlterTable
-ALTER TABLE "books" ADD COLUMN     "authorId" UUID NOT NULL;
+-- CreateEnum
+CREATE TYPE "BookStatus" AS ENUM ('DRAFT', 'PUBLISHED', 'ARCHIVED');
 
 -- CreateTable
 CREATE TABLE "users" (
@@ -20,8 +14,26 @@ CREATE TABLE "users" (
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "books" (
+    "id" UUID NOT NULL,
+    "title" VARCHAR(255) NOT NULL,
+    "price" DECIMAL(10,2) NOT NULL,
+    "isbn" VARCHAR(13) NOT NULL,
+    "language" VARCHAR(10) NOT NULL,
+    "status" "BookStatus" NOT NULL DEFAULT 'DRAFT',
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "authorId" UUID NOT NULL,
+
+    CONSTRAINT "books_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "users_username_key" ON "users"("username");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "books_isbn_key" ON "books"("isbn");
 
 -- AddForeignKey
 ALTER TABLE "books" ADD CONSTRAINT "books_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

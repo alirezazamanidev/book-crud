@@ -8,12 +8,13 @@ import { TokenService } from "../../services/token.service";
 export class AuthGuard implements CanActivate {
 
   constructor(private readonly tokenService: TokenService) { }
-  canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
+  async canActivate(context: ExecutionContext): Promise<boolean>{
 
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
- 
-    request.user = this.tokenService.verify(token);
+
+    request.user = await this.tokenService.verify(token);
+
     return true;
   }
   private extractTokenFromHeader(request: Request): string {

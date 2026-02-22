@@ -29,6 +29,27 @@ export class User extends AggregateRoot<string> {
     user.updatedAt=new Date();
     return user;
   }
+  static reconstitute(props: {
+    id: string,
+    userName: string,
+    hashPassword: string,
+    fullName?: string | null,
+    isVerify: boolean,
+    books?: Book[],
+    createdAt: Date,
+    updatedAt: Date
+  }): User {
+    const user = new User();
+    user.id = props.id;
+    user._username = props.userName;
+    user._hashPassword = props.hashPassword;
+    user._fullName = props.fullName ?? null;
+    user._isVerify = props.isVerify;
+    user._books = props.books ?? [];
+    user.createdAt = props.createdAt;
+    user.updatedAt = props.updatedAt;
+    return user;
+  }
 
   // getter
   public get fullName(): string | null {

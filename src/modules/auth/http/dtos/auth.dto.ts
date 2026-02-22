@@ -9,3 +9,17 @@ export class SignInDto {
   @Length(8,16)
   password:string;
 }
+
+export class SignUpDto {
+  @IsString()
+  @IsNotEmpty()
+  fullname:string;
+  @IsNotEmpty()
+  @IsString()
+
+  username:string;
+  @IsNotEmpty()
+  @IsString()
+  @Length(8,16)
+  password:string;
+}

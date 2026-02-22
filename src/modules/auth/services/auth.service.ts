@@ -1,9 +1,10 @@
-import { Inject, Injectable, UnauthorizedException } from "@nestjs/common";
+import { ConflictException, Inject, Injectable, UnauthorizedException } from "@nestjs/common";
 import { USER_REPOSITORY } from "../../user/user.constants";
 import type { IUserRepository } from "../../user/domain/repositories/user.repository.port";
-import { SignInDto } from "../http/dtos/auth.dto";
-import { compare } from "bcrypt";
+import { SignInDto, SignUpDto } from "../http/dtos/auth.dto";
+import { compare, hashSync } from "bcrypt";
 import { TokenService } from "./token.service";
+import { User } from "../../user/domain/User";
 
 @Injectable()
 export class AuthService {
@@ -18,11 +19,33 @@ export class AuthService {
 
 
     return {
-      message:'login successfully',
+      message: 'login successfully',
+      token: {
+        type: 'bearer header',
+        value: await this.tokenService.generateToken(user),
+        expiresIn: '7d'
+      }
+    }
+  }
+
+  async signUp(dto: SignUpDto) {
+    let user = await this.userRepository.findByUsername(dto.username);
+    if (user) throw new ConflictException('The Username is already exists');
+    const hashPassword = hashSync(dto.password, 10);
+    user = User.create({
+      username: dto.username,
+      fullName: dto.fullname,
+      hashPassword
+    })
+    await this.userRepository.save(user);
+
+    return {
+      message: 'signUp successFully',
       token:{
-        type:'bearer header',
-        value:await this.tokenService.generateToken(user),
-        expiresIn:'7d'
+        type: 'bearer header',
+        value: await this.tokenService.generateToken(user),
+        expiresIn: '7d'
+
       }
     }
   }

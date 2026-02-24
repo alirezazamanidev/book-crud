@@ -9,42 +9,43 @@ export class UserRepository implements IUserRepository {
   constructor(private readonly prisma: PrismaService) { }
   async save(user: User): Promise<void> {
     await this.prisma.user.upsert({
-      where: { id: user.id },
+      where: { uid: user.id },
       update: {
         username: user.userName,
-        hashPassword: user.hashPassword,
-        fullName: user.fullName,
-        isVerify: user.isVerify
+        hash_password: user.hashPassword,
+        fullname: user.fullName,
+        is_verify: user.isVerify
       },
       create: {
-        id: user.id,
+        uid: user.id,
         username: user.userName,
-        hashPassword: user.hashPassword,
-        fullName: user.fullName,
-        isVerify: user.isVerify
+        hash_password: user.hashPassword,
+        fullname: user.fullName,
+        is_verify: user.isVerify
       },
     });
   }
 
   async findByUsername(username: string): Promise<User | null> {
     const entity = await this.prisma.user.findUnique({
-      where: { username }
+      where: { username },
+
     })
     if (!entity) return null;
     return User.reconstitute({
-      id: entity.id,
+      id: entity.uid,
       userName: entity.username,
-      hashPassword: entity.hashPassword,
-      fullName: entity.fullName,
-      isVerify: entity.isVerify,
-      createdAt: entity.createdAt,
-      updatedAt: entity.updatedAt
+      hashPassword: entity.hash_password,
+      fullName: entity.fullname,
+      isVerify: entity.is_verify,
+      createdAt: entity.created_at,
+      updatedAt: entity.updated_at
     })
 
 
   }
 
   async exists(id: string): Promise<boolean> {
-    return await this.prisma.user.count({ where: { id } }) > 0;
+    return await this.prisma.user.count({ where: { uid: id } }) > 0;
   }
 }

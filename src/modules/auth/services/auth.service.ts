@@ -35,19 +35,19 @@ export class AuthService {
     let user = await this.userRepository.findByUsername(dto.username);
     if (user) throw new ConflictException('The Username is already exists');
     const hashPassword = hashSync(dto.password, 10);
-    user = User.create({
+    const newUser = User.create({
       username: dto.username,
       fullName: dto.fullname,
       hashPassword
     })
-    user.isVerify=true
-    await this.userRepository.save(user);
+    newUser.isVerify=true
+    await this.userRepository.save(newUser);
 
     return {
       message: 'signUp successFully',
       token:{
         type: 'bearer header',
-        value: await this.tokenService.generateToken(user),
+        value: await this.tokenService.generateToken(newUser),
         expiresIn: '7d'
 
       }

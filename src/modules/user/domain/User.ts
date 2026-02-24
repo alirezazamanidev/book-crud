@@ -9,7 +9,7 @@ export class User extends AggregateRoot<string> {
   private _username: string
   private _hashPassword: string
   private _isVerify: boolean
-  private _books: Book[]
+
 
   private constructor() {
     super()
@@ -19,13 +19,13 @@ export class User extends AggregateRoot<string> {
     username,fullName,hashPassword
   }:{username:string,hashPassword:string,fullName:string}) {
     const user= new User();
-    user.id=randomUUID().toString();
+    user.id=randomUUID()
     user._fullName=fullName;
     user._username=username;
     user._hashPassword=hashPassword;
     user._isVerify=false;
-    user._books=[];
-    user.createdAt=new Date();
+
+      user.createdAt=new Date();
     user.updatedAt=new Date();
     return user;
   }
@@ -35,7 +35,7 @@ export class User extends AggregateRoot<string> {
     hashPassword: string,
     fullName?: string | null,
     isVerify: boolean,
-    books?: Book[],
+
     createdAt: Date,
     updatedAt: Date
   }): User {
@@ -45,7 +45,6 @@ export class User extends AggregateRoot<string> {
     user._hashPassword = props.hashPassword;
     user._fullName = props.fullName ?? null;
     user._isVerify = props.isVerify;
-    user._books = props.books ?? [];
     user.createdAt = props.createdAt;
     user.updatedAt = props.updatedAt;
     return user;
@@ -68,8 +67,6 @@ export class User extends AggregateRoot<string> {
   public get isVerify(): boolean {
     return this._isVerify;
   }
-  public get books(): Book[] {
-    return this._books;
-  }
+
 
 }

@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
   Req,
@@ -30,18 +31,20 @@ export class BookController {
 
   @Get()
   findAll(@Req() req:Request) {
+
     return this.bookService.findAll(req?.['user'].id);
   }
   @Get(':id')
-  findOne(@Param('id') id: string,@Req() req:Request) {
+  findOne(@Param('id',ParseUUIDPipe) id: string,@Req() req:Request) {
+
     return this.bookService.findOne(id,req?.['user'].id);
   }
   @Put(':id')
-  update(@Param('id') id: string, @Body() dto: UpdateBookDto, @Req() req: Request) {
+  update(@Param('id',ParseUUIDPipe) id: string, @Body() dto: UpdateBookDto, @Req() req: Request) {
     return this.bookService.update(id,req?.['user'].id, dto);
   }
   @Delete(':id')
-  async remove(@Param('id') id: string, @Req() req: Request) {
+  async remove(@Param('id',ParseUUIDPipe) id: string, @Req() req: Request) {
     return this.bookService.delete(id,req?.['user'].id);
   }
 }

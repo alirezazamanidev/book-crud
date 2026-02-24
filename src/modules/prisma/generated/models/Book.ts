@@ -27,93 +27,107 @@ export type AggregateBook = {
 }
 
 export type BookAvgAggregateOutputType = {
+  id: number | null
   price: runtime.Decimal | null
+  author_id: number | null
 }
 
 export type BookSumAggregateOutputType = {
+  id: number | null
   price: runtime.Decimal | null
+  author_id: number | null
 }
 
 export type BookMinAggregateOutputType = {
-  id: string | null
+  id: number | null
+  uid: string | null
   title: string | null
   price: runtime.Decimal | null
   isbn: string | null
   language: string | null
   status: $Enums.BookStatus | null
-  createdAt: Date | null
-  updatedAt: Date | null
-  authorId: string | null
+  created_at: Date | null
+  updated_at: Date | null
+  author_id: number | null
 }
 
 export type BookMaxAggregateOutputType = {
-  id: string | null
+  id: number | null
+  uid: string | null
   title: string | null
   price: runtime.Decimal | null
   isbn: string | null
   language: string | null
   status: $Enums.BookStatus | null
-  createdAt: Date | null
-  updatedAt: Date | null
-  authorId: string | null
+  created_at: Date | null
+  updated_at: Date | null
+  author_id: number | null
 }
 
 export type BookCountAggregateOutputType = {
   id: number
+  uid: number
   title: number
   price: number
   isbn: number
   language: number
   status: number
-  createdAt: number
-  updatedAt: number
-  authorId: number
+  created_at: number
+  updated_at: number
+  author_id: number
   _all: number
 }
 
 
 export type BookAvgAggregateInputType = {
+  id?: true
   price?: true
+  author_id?: true
 }
 
 export type BookSumAggregateInputType = {
+  id?: true
   price?: true
+  author_id?: true
 }
 
 export type BookMinAggregateInputType = {
   id?: true
+  uid?: true
   title?: true
   price?: true
   isbn?: true
   language?: true
   status?: true
-  createdAt?: true
-  updatedAt?: true
-  authorId?: true
+  created_at?: true
+  updated_at?: true
+  author_id?: true
 }
 
 export type BookMaxAggregateInputType = {
   id?: true
+  uid?: true
   title?: true
   price?: true
   isbn?: true
   language?: true
   status?: true
-  createdAt?: true
-  updatedAt?: true
-  authorId?: true
+  created_at?: true
+  updated_at?: true
+  author_id?: true
 }
 
 export type BookCountAggregateInputType = {
   id?: true
+  uid?: true
   title?: true
   price?: true
   isbn?: true
   language?: true
   status?: true
-  createdAt?: true
-  updatedAt?: true
-  authorId?: true
+  created_at?: true
+  updated_at?: true
+  author_id?: true
   _all?: true
 }
 
@@ -204,15 +218,16 @@ export type BookGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 }
 
 export type BookGroupByOutputType = {
-  id: string
+  id: number
+  uid: string
   title: string
   price: runtime.Decimal
   isbn: string
   language: string
   status: $Enums.BookStatus
-  createdAt: Date
-  updatedAt: Date
-  authorId: string
+  created_at: Date
+  updated_at: Date
+  author_id: number
   _count: BookCountAggregateOutputType | null
   _avg: BookAvgAggregateOutputType | null
   _sum: BookSumAggregateOutputType | null
@@ -239,33 +254,36 @@ export type BookWhereInput = {
   AND?: Prisma.BookWhereInput | Prisma.BookWhereInput[]
   OR?: Prisma.BookWhereInput[]
   NOT?: Prisma.BookWhereInput | Prisma.BookWhereInput[]
-  id?: Prisma.UuidFilter<"Book"> | string
+  id?: Prisma.IntFilter<"Book"> | number
+  uid?: Prisma.UuidFilter<"Book"> | string
   title?: Prisma.StringFilter<"Book"> | string
   price?: Prisma.DecimalFilter<"Book"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   isbn?: Prisma.StringFilter<"Book"> | string
   language?: Prisma.StringFilter<"Book"> | string
   status?: Prisma.EnumBookStatusFilter<"Book"> | $Enums.BookStatus
-  createdAt?: Prisma.DateTimeFilter<"Book"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Book"> | Date | string
-  authorId?: Prisma.UuidFilter<"Book"> | string
+  created_at?: Prisma.DateTimeFilter<"Book"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"Book"> | Date | string
+  author_id?: Prisma.IntFilter<"Book"> | number
   author?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
 export type BookOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  uid?: Prisma.SortOrder
   title?: Prisma.SortOrder
   price?: Prisma.SortOrder
   isbn?: Prisma.SortOrder
   language?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
-  authorId?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  author_id?: Prisma.SortOrder
   author?: Prisma.UserOrderByWithRelationInput
 }
 
 export type BookWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
+  id?: number
+  uid?: string
   isbn?: string
   AND?: Prisma.BookWhereInput | Prisma.BookWhereInput[]
   OR?: Prisma.BookWhereInput[]
@@ -274,22 +292,23 @@ export type BookWhereUniqueInput = Prisma.AtLeast<{
   price?: Prisma.DecimalFilter<"Book"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   language?: Prisma.StringFilter<"Book"> | string
   status?: Prisma.EnumBookStatusFilter<"Book"> | $Enums.BookStatus
-  createdAt?: Prisma.DateTimeFilter<"Book"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Book"> | Date | string
-  authorId?: Prisma.UuidFilter<"Book"> | string
+  created_at?: Prisma.DateTimeFilter<"Book"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"Book"> | Date | string
+  author_id?: Prisma.IntFilter<"Book"> | number
   author?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-}, "id" | "isbn">
+}, "id" | "uid" | "isbn">
 
 export type BookOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  uid?: Prisma.SortOrder
   title?: Prisma.SortOrder
   price?: Prisma.SortOrder
   isbn?: Prisma.SortOrder
   language?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
-  authorId?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  author_id?: Prisma.SortOrder
   _count?: Prisma.BookCountOrderByAggregateInput
   _avg?: Prisma.BookAvgOrderByAggregateInput
   _max?: Prisma.BookMaxOrderByAggregateInput
@@ -301,98 +320,103 @@ export type BookScalarWhereWithAggregatesInput = {
   AND?: Prisma.BookScalarWhereWithAggregatesInput | Prisma.BookScalarWhereWithAggregatesInput[]
   OR?: Prisma.BookScalarWhereWithAggregatesInput[]
   NOT?: Prisma.BookScalarWhereWithAggregatesInput | Prisma.BookScalarWhereWithAggregatesInput[]
-  id?: Prisma.UuidWithAggregatesFilter<"Book"> | string
+  id?: Prisma.IntWithAggregatesFilter<"Book"> | number
+  uid?: Prisma.UuidWithAggregatesFilter<"Book"> | string
   title?: Prisma.StringWithAggregatesFilter<"Book"> | string
   price?: Prisma.DecimalWithAggregatesFilter<"Book"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   isbn?: Prisma.StringWithAggregatesFilter<"Book"> | string
   language?: Prisma.StringWithAggregatesFilter<"Book"> | string
   status?: Prisma.EnumBookStatusWithAggregatesFilter<"Book"> | $Enums.BookStatus
-  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Book"> | Date | string
-  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Book"> | Date | string
-  authorId?: Prisma.UuidWithAggregatesFilter<"Book"> | string
+  created_at?: Prisma.DateTimeWithAggregatesFilter<"Book"> | Date | string
+  updated_at?: Prisma.DateTimeWithAggregatesFilter<"Book"> | Date | string
+  author_id?: Prisma.IntWithAggregatesFilter<"Book"> | number
 }
 
 export type BookCreateInput = {
-  id: string
+  uid?: string
   title: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   isbn: string
   language: string
   status?: $Enums.BookStatus
-  createdAt?: Date | string
-  updatedAt?: Date | string
+  created_at?: Date | string
+  updated_at?: Date | string
   author: Prisma.UserCreateNestedOneWithoutBooksInput
 }
 
 export type BookUncheckedCreateInput = {
-  id: string
+  id?: number
+  uid?: string
   title: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   isbn: string
   language: string
   status?: $Enums.BookStatus
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  authorId: string
+  created_at?: Date | string
+  updated_at?: Date | string
+  author_id: number
 }
 
 export type BookUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  uid?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   isbn?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumBookStatusFieldUpdateOperationsInput | $Enums.BookStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneRequiredWithoutBooksNestedInput
 }
 
 export type BookUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  uid?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   isbn?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumBookStatusFieldUpdateOperationsInput | $Enums.BookStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  authorId?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  author_id?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type BookCreateManyInput = {
-  id: string
+  id?: number
+  uid?: string
   title: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   isbn: string
   language: string
   status?: $Enums.BookStatus
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  authorId: string
+  created_at?: Date | string
+  updated_at?: Date | string
+  author_id: number
 }
 
 export type BookUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  uid?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   isbn?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumBookStatusFieldUpdateOperationsInput | $Enums.BookStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type BookUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  uid?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   isbn?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumBookStatusFieldUpdateOperationsInput | $Enums.BookStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  authorId?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  author_id?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type BookListRelationFilter = {
@@ -407,46 +431,53 @@ export type BookOrderByRelationAggregateInput = {
 
 export type BookCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  uid?: Prisma.SortOrder
   title?: Prisma.SortOrder
   price?: Prisma.SortOrder
   isbn?: Prisma.SortOrder
   language?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
-  authorId?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  author_id?: Prisma.SortOrder
 }
 
 export type BookAvgOrderByAggregateInput = {
+  id?: Prisma.SortOrder
   price?: Prisma.SortOrder
+  author_id?: Prisma.SortOrder
 }
 
 export type BookMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  uid?: Prisma.SortOrder
   title?: Prisma.SortOrder
   price?: Prisma.SortOrder
   isbn?: Prisma.SortOrder
   language?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
-  authorId?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  author_id?: Prisma.SortOrder
 }
 
 export type BookMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  uid?: Prisma.SortOrder
   title?: Prisma.SortOrder
   price?: Prisma.SortOrder
   isbn?: Prisma.SortOrder
   language?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
-  authorId?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+  author_id?: Prisma.SortOrder
 }
 
 export type BookSumOrderByAggregateInput = {
+  id?: Prisma.SortOrder
   price?: Prisma.SortOrder
+  author_id?: Prisma.SortOrder
 }
 
 export type BookCreateNestedManyWithoutAuthorInput = {
@@ -504,25 +535,26 @@ export type EnumBookStatusFieldUpdateOperationsInput = {
 }
 
 export type BookCreateWithoutAuthorInput = {
-  id: string
+  uid?: string
   title: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   isbn: string
   language: string
   status?: $Enums.BookStatus
-  createdAt?: Date | string
-  updatedAt?: Date | string
+  created_at?: Date | string
+  updated_at?: Date | string
 }
 
 export type BookUncheckedCreateWithoutAuthorInput = {
-  id: string
+  id?: number
+  uid?: string
   title: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   isbn: string
   language: string
   status?: $Enums.BookStatus
-  createdAt?: Date | string
-  updatedAt?: Date | string
+  created_at?: Date | string
+  updated_at?: Date | string
 }
 
 export type BookCreateOrConnectWithoutAuthorInput = {
@@ -555,115 +587,123 @@ export type BookScalarWhereInput = {
   AND?: Prisma.BookScalarWhereInput | Prisma.BookScalarWhereInput[]
   OR?: Prisma.BookScalarWhereInput[]
   NOT?: Prisma.BookScalarWhereInput | Prisma.BookScalarWhereInput[]
-  id?: Prisma.UuidFilter<"Book"> | string
+  id?: Prisma.IntFilter<"Book"> | number
+  uid?: Prisma.UuidFilter<"Book"> | string
   title?: Prisma.StringFilter<"Book"> | string
   price?: Prisma.DecimalFilter<"Book"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   isbn?: Prisma.StringFilter<"Book"> | string
   language?: Prisma.StringFilter<"Book"> | string
   status?: Prisma.EnumBookStatusFilter<"Book"> | $Enums.BookStatus
-  createdAt?: Prisma.DateTimeFilter<"Book"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Book"> | Date | string
-  authorId?: Prisma.UuidFilter<"Book"> | string
+  created_at?: Prisma.DateTimeFilter<"Book"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"Book"> | Date | string
+  author_id?: Prisma.IntFilter<"Book"> | number
 }
 
 export type BookCreateManyAuthorInput = {
-  id: string
+  id?: number
+  uid?: string
   title: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   isbn: string
   language: string
   status?: $Enums.BookStatus
-  createdAt?: Date | string
-  updatedAt?: Date | string
+  created_at?: Date | string
+  updated_at?: Date | string
 }
 
 export type BookUpdateWithoutAuthorInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  uid?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   isbn?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumBookStatusFieldUpdateOperationsInput | $Enums.BookStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type BookUncheckedUpdateWithoutAuthorInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  uid?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   isbn?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumBookStatusFieldUpdateOperationsInput | $Enums.BookStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type BookUncheckedUpdateManyWithoutAuthorInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  uid?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   isbn?: Prisma.StringFieldUpdateOperationsInput | string
   language?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumBookStatusFieldUpdateOperationsInput | $Enums.BookStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
 
 export type BookSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  uid?: boolean
   title?: boolean
   price?: boolean
   isbn?: boolean
   language?: boolean
   status?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
-  authorId?: boolean
+  created_at?: boolean
+  updated_at?: boolean
+  author_id?: boolean
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["book"]>
 
 export type BookSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  uid?: boolean
   title?: boolean
   price?: boolean
   isbn?: boolean
   language?: boolean
   status?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
-  authorId?: boolean
+  created_at?: boolean
+  updated_at?: boolean
+  author_id?: boolean
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["book"]>
 
 export type BookSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  uid?: boolean
   title?: boolean
   price?: boolean
   isbn?: boolean
   language?: boolean
   status?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
-  authorId?: boolean
+  created_at?: boolean
+  updated_at?: boolean
+  author_id?: boolean
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["book"]>
 
 export type BookSelectScalar = {
   id?: boolean
+  uid?: boolean
   title?: boolean
   price?: boolean
   isbn?: boolean
   language?: boolean
   status?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
-  authorId?: boolean
+  created_at?: boolean
+  updated_at?: boolean
+  author_id?: boolean
 }
 
-export type BookOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "price" | "isbn" | "language" | "status" | "createdAt" | "updatedAt" | "authorId", ExtArgs["result"]["book"]>
+export type BookOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "uid" | "title" | "price" | "isbn" | "language" | "status" | "created_at" | "updated_at" | "author_id", ExtArgs["result"]["book"]>
 export type BookInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -680,15 +720,16 @@ export type $BookPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     author: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
+    id: number
+    uid: string
     title: string
     price: runtime.Decimal
     isbn: string
     language: string
     status: $Enums.BookStatus
-    createdAt: Date
-    updatedAt: Date
-    authorId: string
+    created_at: Date
+    updated_at: Date
+    author_id: number
   }, ExtArgs["result"]["book"]>
   composites: {}
 }
@@ -1113,15 +1154,16 @@ export interface Prisma__BookClient<T, Null = never, ExtArgs extends runtime.Typ
  * Fields of the Book model
  */
 export interface BookFieldRefs {
-  readonly id: Prisma.FieldRef<"Book", 'String'>
+  readonly id: Prisma.FieldRef<"Book", 'Int'>
+  readonly uid: Prisma.FieldRef<"Book", 'String'>
   readonly title: Prisma.FieldRef<"Book", 'String'>
   readonly price: Prisma.FieldRef<"Book", 'Decimal'>
   readonly isbn: Prisma.FieldRef<"Book", 'String'>
   readonly language: Prisma.FieldRef<"Book", 'String'>
   readonly status: Prisma.FieldRef<"Book", 'BookStatus'>
-  readonly createdAt: Prisma.FieldRef<"Book", 'DateTime'>
-  readonly updatedAt: Prisma.FieldRef<"Book", 'DateTime'>
-  readonly authorId: Prisma.FieldRef<"Book", 'String'>
+  readonly created_at: Prisma.FieldRef<"Book", 'DateTime'>
+  readonly updated_at: Prisma.FieldRef<"Book", 'DateTime'>
+  readonly author_id: Prisma.FieldRef<"Book", 'Int'>
 }
     
 

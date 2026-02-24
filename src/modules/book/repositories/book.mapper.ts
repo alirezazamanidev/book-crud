@@ -1,28 +1,24 @@
-
-import type { Book as BookEntity } from '../../prisma/generated/client';
+import { Prisma } from '../../prisma/generated/client';
 import { Book } from '../domain/Book';
-/** Maps between domain Book and Prisma Book model. */
+
+type BookWithAuthor = Prisma.BookGetPayload<{ include: { author: true } }>;
+
 export class BookMapper {
-  static toDomain(entity: BookEntity | null): Book | null {
+  static toDomain(entity: BookWithAuthor | null): Book | null {
     if (!entity) return null;
-    const price =
-      typeof entity.price === 'object' && entity.price !== null && 'toNumber' in entity.price
-        ? (entity.price as { toNumber(): number }).toNumber()
-        : Number(entity.price);
     return Book.reconstruct(
-      entity.id,
-      entity.authorId,
+      entity.uid,
+      entity.author?.uid, 
       entity.title,
-      price,
+      +entity.price,
       entity.language,
       entity.isbn,
       entity.status,
-      entity.createdAt,
-      entity.updatedAt,
+      entity.created_at,
+      entity.updated_at,
     );
   }
 
-  /** Domain -> Prisma create/update payload (no id for create). */
   static toPersistence(book: Book) {
     return {
       id: book.id,
@@ -37,11 +33,9 @@ export class BookMapper {
     };
   }
 
-  static toDomainArray(entities: BookEntity[]) {
-    return (
-      entities
-        ?.map((e) => this.toDomain(e))
-        .filter((b): b is Book => b !== null) ?? []
-    );
+  static toDomainArray(entities: BookWithAuthor[]): Book[] {
+    return entities
+      .map((e) => this.toDomain(e))
+      .filter((b): b is Book => b !== null);
   }
 }

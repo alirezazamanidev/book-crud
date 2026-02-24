@@ -18,6 +18,7 @@ export class AuthGuard implements CanActivate {
     return true;
   }
   private extractTokenFromHeader(request: Request): string {
+    if(!request.headers['authorization']) throw new UnauthorizedException()
     const [type, token] = request.headers['authorization']?.split(' ') ?? [];
 
     if (type.toLocaleLowerCase() !== 'bearer' || !token || !isJWT(token)) throw new UnauthorizedException()

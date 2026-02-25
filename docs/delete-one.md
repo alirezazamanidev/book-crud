@@ -2,17 +2,18 @@
 # Delete Book
 ```mermaid
 sequenceDiagram
-    box rgb(3, 3, 33) Client / Front
+   box rgb(216, 216, 242) Client / Front
     participant Client as Client Application
     end
-    box rgb(61, 5, 5) App
+    box rgb(171, 156, 156) App
     participant API as API Endpoint
     participant Logic as Business Logic Layer
     participant DataAccess as Data Access Layer
     end
-    box rgb(2, 27, 2) DB
-    participant Database@{"type":"database"}
+    box rgb(202, 243, 202) DB
+    participant Database
     end
+
     Note over Client: User requests deletion of specific resource by identifier
     Client->>API: Send delete request (e.g., DELETE with ID)
     Note over API: Receive request, validate identifier

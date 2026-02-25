@@ -2,17 +2,18 @@
 # Create book
 ```mermaid
 sequenceDiagram
-    box rgb(3, 3, 44) Client / Front
+    box rgb(216, 216, 242) Client / Front
     participant Client as Client Application
     end
-    box rgb(67, 8, 8) App
+    box rgb(171, 156, 156) App
     participant API as API Endpoint
     participant Logic as Business Logic Layer
     participant DataAccess as Data Access Layer
     end
-    box rgb(1, 31, 1) DB
-    participant Database@{"type":"database"}
+    box rgb(202, 243, 202) DB
+    participant Database
     end
+
     Note over Client: User provides data for new resource (e.g., book details like title, price, ISBN, language, optional status)
     Client->>API: Send create request (e.g., POST) with data payload
     Note over API: Receive request, perform initial validation on input data

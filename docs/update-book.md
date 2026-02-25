@@ -2,17 +2,18 @@
 # Update book
 ```mermaid
 sequenceDiagram
-    box rgb(4, 4, 61) Client / Front
+    box rgb(216, 216, 242) Client / Front
     participant Client as Client Application
     end
-    box rgb(52, 7, 7) App
+    box rgb(171, 156, 156) App
     participant API as API Endpoint
     participant Logic as Business Logic Layer
     participant DataAccess as Data Access Layer
     end
-    box rgb(2, 34, 2) DB
-    participant Database@{"type":"database"}
+    box rgb(202, 243, 202) DB
+    participant Database
     end
+
     Note over Client: User provides updated data for specific resource (e.g., optional fields like title, status)
     Client->>API: Send update request (e.g., PUT/PATCH with ID) with data payload
     Note over API: Receive request, validate input data and identifier

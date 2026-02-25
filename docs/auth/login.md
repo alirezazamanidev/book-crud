@@ -1,17 +1,18 @@
 # Login / Obtain authentication token
 ```mermaid
 sequenceDiagram
-    box rgb(3, 3, 44) Client / Front
+    box rgb(216, 216, 242) Client / Front
     participant Client as Client Application
     end
-    box rgb(67, 8, 8) App
+    box rgb(171, 156, 156) App
     participant API as API Endpoint
     participant Logic as Business Logic Layer
     participant DataAccess as Data Access Layer
     end
-    box rgb(1, 31, 1) DB
+    box rgb(202, 243, 202) DB
     participant Database
     end
+
 
     Note over Client: User provides credentials (username and password) for authentication
     Client->>API: Send login request (e.g., POST /auth/login) with JSON body containing username and password

@@ -14,15 +14,13 @@ export class PrismaBookRepository implements IBookRepository {
   async save(book: Book): Promise<void> {
     try {
       const data = BookMapper.toPersistence(book);
-      const author = await this.prisma.user.findUnique({
-        where: { uid: data.authorId },
-        select: { id: true },
-      });
-      if(!author) throw new NotFoundException('author not found')
       await this.prisma.book.upsert({
+        include: { author: true },
         where: { uid: book.id },
         create: {
-        author_id: author.id,
+          author:{
+            connect:{uid:data.authorId}
+          },
           uid: data.id,
           title: data.title,
           price: data.price,
@@ -66,21 +64,16 @@ export class PrismaBookRepository implements IBookRepository {
   }
 
   async findByIsbn(isbn: string): Promise<Book | null> {
-    try {
       const entity = await this.prisma.book.findUnique({
         where: { isbn },
         include: { author: true },
       });
       return BookMapper.toDomain(entity);
-    } catch (error) {
-      this.logger.error(`Failed to find book by ISBN ${isbn}:`, error);
-      const message = error instanceof Error ? error.message : String(error);
-      throw new Error(`Failed to find book by ISBN: ${message}`);
-    }
+
   }
 
   async findAllForAuthor(authorId: string): Promise<Book[]> {
-    try {
+
       const entities = await this.prisma.book.findMany({
         where: {
           author: { uid: authorId },
@@ -89,15 +82,11 @@ export class PrismaBookRepository implements IBookRepository {
         orderBy: { created_at: 'desc' },
       });
       return BookMapper.toDomainArray(entities);
-    } catch (error) {
-      this.logger.error('Failed to find all books for author:', error);
-      const message = error instanceof Error ? error.message : String(error);
-      throw new Error(`Failed to find all books: ${message}`);
-    }
+
   }
 
   async deleteForAuthor(id: string, authorId: string): Promise<void> {
-    try {
+
       const result = await this.prisma.book.deleteMany({
         where: {
           uid: id,
@@ -109,23 +98,15 @@ export class PrismaBookRepository implements IBookRepository {
       } else {
         this.logger.debug(`Book deleted: ${id}`);
       }
-    } catch (error) {
-      this.logger.error(`Failed to delete book ${id}:`, error);
-      const message = error instanceof Error ? error.message : String(error);
-      throw new Error(`Failed to delete book: ${message}`);
-    }
+
   }
 
   async exists(id: string): Promise<boolean> {
-    try {
+
       const count = await this.prisma.book.count({
         where: { uid: id },
       });
       return count > 0;
-    } catch (error) {
-      this.logger.error(`Failed to check existence of book ${id}:`, error);
-      const message = error instanceof Error ? error.message : String(error);
-      throw new Error(`Failed to check book existence: ${message}`);
-    }
+
   }
 }

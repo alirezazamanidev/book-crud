@@ -6,6 +6,7 @@ import { configurations } from './configs/env.config';
 import { PrismaModule } from './modules/prisma/prisma.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { RedisModule } from './modules/redis/redis.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { AuthModule } from './modules/auth/auth.module';
       load: configurations,
     }),
     AuthModule,
+    RedisModule,
     PrismaModule,
     BookModule,
     UserModule,

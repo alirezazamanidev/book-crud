@@ -26,6 +26,20 @@ export class UserRepository implements IUserRepository {
     });
   }
 
+  async findById(id: string): Promise<User | null> {
+    const entity = await this.prisma.user.findUnique({ where: { uid: id } });
+    if (!entity) return null;
+    return User.reconstitute({
+      id: entity.uid,
+      userName: entity.username,
+      hashPassword: entity.hash_password,
+      fullName: entity.fullname,
+      isVerify: entity.is_verify,
+      createdAt: entity.created_at,
+      updatedAt: entity.updated_at,
+    });
+  }
+
   async findByUsername(username: string): Promise<User | null> {
     const entity = await this.prisma.user.findUnique({
       where: { username },

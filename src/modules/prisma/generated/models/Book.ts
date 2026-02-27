@@ -333,7 +333,7 @@ export type BookScalarWhereWithAggregatesInput = {
 }
 
 export type BookCreateInput = {
-  uid?: string
+  uid: string
   title: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   isbn: string
@@ -346,7 +346,7 @@ export type BookCreateInput = {
 
 export type BookUncheckedCreateInput = {
   id?: number
-  uid?: string
+  uid: string
   title: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   isbn: string
@@ -384,7 +384,7 @@ export type BookUncheckedUpdateInput = {
 
 export type BookCreateManyInput = {
   id?: number
-  uid?: string
+  uid: string
   title: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   isbn: string
@@ -535,7 +535,7 @@ export type EnumBookStatusFieldUpdateOperationsInput = {
 }
 
 export type BookCreateWithoutAuthorInput = {
-  uid?: string
+  uid: string
   title: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   isbn: string
@@ -547,7 +547,7 @@ export type BookCreateWithoutAuthorInput = {
 
 export type BookUncheckedCreateWithoutAuthorInput = {
   id?: number
-  uid?: string
+  uid: string
   title: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   isbn: string
@@ -601,7 +601,7 @@ export type BookScalarWhereInput = {
 
 export type BookCreateManyAuthorInput = {
   id?: number
-  uid?: string
+  uid: string
   title: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   isbn: string

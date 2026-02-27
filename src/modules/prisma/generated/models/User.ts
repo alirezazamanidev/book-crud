@@ -301,7 +301,7 @@ export type UserScalarWhereWithAggregatesInput = {
 }
 
 export type UserCreateInput = {
-  uid?: string
+  uid: string
   fullname?: string | null
   username: string
   hash_password: string
@@ -313,7 +313,7 @@ export type UserCreateInput = {
 
 export type UserUncheckedCreateInput = {
   id?: number
-  uid?: string
+  uid: string
   fullname?: string | null
   username: string
   hash_password: string
@@ -348,7 +348,7 @@ export type UserUncheckedUpdateInput = {
 
 export type UserCreateManyInput = {
   id?: number
-  uid?: string
+  uid: string
   fullname?: string | null
   username: string
   hash_password: string
@@ -463,7 +463,7 @@ export type UserUpdateOneRequiredWithoutBooksNestedInput = {
 }
 
 export type UserCreateWithoutBooksInput = {
-  uid?: string
+  uid: string
   fullname?: string | null
   username: string
   hash_password: string
@@ -474,7 +474,7 @@ export type UserCreateWithoutBooksInput = {
 
 export type UserUncheckedCreateWithoutBooksInput = {
   id?: number
-  uid?: string
+  uid: string
   fullname?: string | null
   username: string
   hash_password: string

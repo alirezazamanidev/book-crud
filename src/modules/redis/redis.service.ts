@@ -6,7 +6,7 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
     public readonly client: RedisClient;
     private readonly logger = new Logger(RedisService.name);
     constructor() {
-        // Optionally, configure Redis connection options here
+       
         this.client = new Redis({
             host: process.env.REDIS_HOST || '127.0.0.1',
             port: Number(process.env.REDIS_PORT) || 6379,
@@ -22,6 +22,6 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
     }
 
     async onModuleDestroy() {
-        await this.client.quit();
+        await this.client.disconnect();
     }
 }

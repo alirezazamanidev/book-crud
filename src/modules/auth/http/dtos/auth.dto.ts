@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, Length } from "class-validator";
+import { IsNotEmpty, IsJWT, IsString, Length } from "class-validator";
 
 export class SignInDto {
   @IsString()
@@ -13,13 +13,19 @@ export class SignInDto {
 export class SignUpDto {
   @IsString()
   @IsNotEmpty()
-  fullname:string;
+  fullname: string;
   @IsNotEmpty()
   @IsString()
+  username: string;
+  @IsNotEmpty()
+  @IsString()
+  @Length(8, 16)
+  password: string;
+}
 
-  username:string;
-  @IsNotEmpty()
+export class RefreshTokenDto {
   @IsString()
-  @Length(8,16)
-  password:string;
+  @IsNotEmpty()
+  @IsJWT()
+  refreshToken: string;
 }
